@@ -65,7 +65,10 @@ namespace ClubDeportivo.Datos
             catch (Exception ex)
             {
                 cadena = null;
-                throw;
+                throw new Exception(
+                    "Error al construir la cadena de conexión MySQL. " +
+                    "Verifica servidor, puerto, usuario, contraseña y nombre de base de datos.", 
+                    ex);
             }
             return cadena;
         }
