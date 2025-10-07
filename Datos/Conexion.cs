@@ -1,9 +1,11 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
 
 namespace ClubDeportivo.Datos
 {
@@ -21,11 +23,31 @@ namespace ClubDeportivo.Datos
 
         private Conexion()
         {
-            this.baseDatos = "Proyecto";
-            this.servidor = "localhost";
-            this.puerto = "3306";
-            this.usuario = "root";
-            this.clave = Environment.GetEnvironmentVariable("DB_PASSWORD");
+            // tiene que estar en la misma carpeta que el .exe.
+            // ir a propiedades y elegir copy if newer en copy to output directory o ponerlo manualmente.
+            string direccionJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mysql.config.json");
+
+            if (File.Exists(direccionJson)) // nombre del archivo json con tus datos. 
+            {
+                var jsonBdDatos = File.ReadAllText(direccionJson); // lee el archivo.
+                var conexDatos = JsonDocument.Parse(jsonBdDatos).RootElement.GetProperty("DatosConexion");
+
+                this.baseDatos = conexDatos.GetProperty("NombreBd").GetString() ?? "Proyecto";
+                this.servidor = conexDatos.GetProperty("Servidor").GetString() ?? "localhost";
+                this.puerto = conexDatos.GetProperty("Puerto").GetString() ?? "3306";
+                this.usuario = conexDatos.GetProperty("Usuario").GetString() ?? "root";
+                this.clave = conexDatos.GetProperty("Clave").GetString() ?? "";
+
+            }
+            else
+            {
+                // Si no, ponen la config que necesiten acá.
+                this.baseDatos = "Proyecto";
+                this.servidor = "localhost";
+                this.puerto = "3306";
+                this.usuario = "root";
+                this.clave = "";
+            }
         }
 
         public MySqlConnection CrearConcexion()
@@ -43,7 +65,10 @@ namespace ClubDeportivo.Datos
             catch (Exception ex)
             {
                 cadena = null;
-                throw;
+                throw new Exception(
+                    "Error al construir la cadena de conexión MySQL. " +
+                    "Verifica servidor, puerto, usuario, contraseña y nombre de base de datos.", 
+                    ex);
             }
             return cadena;
         }

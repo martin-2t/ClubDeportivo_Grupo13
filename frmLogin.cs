@@ -27,9 +27,8 @@ namespace ClubDeportivo
 
         private void btnIngresarLogin_Click(object sender, EventArgs e)
         {
-            DataTable tablaLogin = new DataTable(); // es la que recibe los datos desde el formulario
-            Usuarios dato = new Datos.Usuarios(); // variable que contiene todas las caracteristicas de la clase
-            tablaLogin = dato.Log_Usu(txtUsuarioLogin.Text, txtPassLogin.Text);
+            Usuarios dato = new Usuarios(); // variable que contiene todas las caracteristicas de la clase
+            DataTable tablaLogin = dato.Log_Usu(txtUsuarioLogin.Text, txtPassLogin.Text); // es la que recibe los datos desde el formulario
             if (tablaLogin.Rows.Count > 0)
             {
                 // quiere decir que el resultado tiene 1 fila por lo que el usuario EXISTE
@@ -45,6 +44,5 @@ namespace ClubDeportivo
             }
         }
 
-        
     }
 }
