@@ -10,11 +10,18 @@ using System.Windows.Forms;
 
 namespace ClubDeportivo
 {
-    public partial class Form1 : Form
+    public partial class frmPagarCuotaMensual : Form
     {
-        public Form1()
+        public frmPagarCuotaMensual()
         {
             InitializeComponent();
+        }
+
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            frmPrincipal principal = new frmPrincipal();
+            principal.Show();
+            this.Hide();
         }
     }
 }

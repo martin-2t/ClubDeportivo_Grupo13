@@ -246,11 +246,11 @@
   <ItemGroup>
     <Compile Include="Datos\Conexion.cs" />
     <Compile Include="Datos\Usuarios.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="frmListaMorosos.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="frmListaMorosos.Designer.cs">
+      <DependentUpon>frmListaMorosos.cs</DependentUpon>
     </Compile>
     <Compile Include="frmLogin.cs">
       <SubType>Form</SubType>
@@ -258,19 +258,68 @@
     <Compile Include="frmLogin.Designer.cs">
       <DependentUpon>frmLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmPagarCuota.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPagarCuota.Designer.cs">
+      <DependentUpon>frmPagarCuota.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPagarCuotaDiaria.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPagarCuotaDiaria.Designer.cs">
+      <DependentUpon>frmPagarCuotaDiaria.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPagarCuotaMensual.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPagarCuotaMensual.Designer.cs">
+      <DependentUpon>frmPagarCuotaMensual.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmPrincipal.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmPrincipal.Designer.cs">
       <DependentUpon>frmPrincipal.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmRegistrarNoSocio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRegistrarNoSocio.Designer.cs">
+      <DependentUpon>frmRegistrarNoSocio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmRegistrarSocio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRegistrarSocio.Designer.cs">
+      <DependentUpon>frmRegistrarSocio.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Session.cs" />
+    <EmbeddedResource Include="frmListaMorosos.resx">
+      <DependentUpon>frmListaMorosos.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmLogin.resx">
       <DependentUpon>frmLogin.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmPagarCuota.resx">
+      <DependentUpon>frmPagarCuota.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPagarCuotaDiaria.resx">
+      <DependentUpon>frmPagarCuotaDiaria.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPagarCuotaMensual.resx">
+      <DependentUpon>frmPagarCuotaMensual.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmPrincipal.resx">
       <DependentUpon>frmPrincipal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRegistrarNoSocio.resx">
+      <DependentUpon>frmRegistrarNoSocio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRegistrarSocio.resx">
+      <DependentUpon>frmRegistrarSocio.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

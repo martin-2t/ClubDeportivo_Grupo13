@@ -31,12 +31,18 @@ namespace ClubDeportivo
             DataTable tablaLogin = dato.Log_Usu(txtUsuarioLogin.Text, txtPassLogin.Text); // es la que recibe los datos desde el formulario
             if (tablaLogin.Rows.Count > 0)
             {
+
+                
+
                 // quiere decir que el resultado tiene 1 fila por lo que el usuario EXISTE
-                //MessageBox.Show("Ingreso exitoso");
-                this.Hide();
+                //MessageBox.Show("Ingreso exitoso"); 
                 frmPrincipal frmPrincipal = new frmPrincipal();
-                frmPrincipal.ShowDialog();
-                this.Close();
+                //frmPrincipal.rol = Convert.ToString(tablaLogin.Rows[0][0]);
+                //frmPrincipal.usuario = Convert.ToString(txtUsuarioLogin.Text);
+                Session.Usuario = Convert.ToString(txtUsuarioLogin.Text);
+                Session.Rol = Convert.ToString(tablaLogin.Rows[0][0]);
+                frmPrincipal.Show();
+                this.Hide();
             }
             else
             {
