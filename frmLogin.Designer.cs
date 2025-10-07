@@ -107,7 +107,6 @@
             this.lblClave.Size = new System.Drawing.Size(76, 16);
             this.lblClave.TabIndex = 6;
             this.lblClave.Text = "Contraseña";
-            this.lblClave.Click += new System.EventHandler(this.label2_Click);
             // 
             // frmLogin
             // 
