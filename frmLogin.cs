@@ -20,7 +20,7 @@ namespace ClubDeportivo
             InitializeComponent();
         }
 
-        // Evento que se ejecuta al cargar el formulario.
+        // Método que se ejecuta al cargar el formulario.
         private void frmLogin_Load(object sender, EventArgs e)
         {
             //txtUsuarioLogin.PlaceholderText = "USUARIO";
@@ -35,8 +35,8 @@ namespace ClubDeportivo
             // Creamos un objeto de la clase Usuarios para acceder a sus metodos.
             Usuarios dato = new Usuarios(); 
             
-            // Llamamos al método Log_Usu padando usuario y clave.
-            // Retora una DataTable con el tipo de rol de unsuario si pasa la verificación.
+            // Llamamos al método Log_Usu pasando usuario y clave.
+            // Retorna una DataTable con el tipo de rol de unsuario si pasa la verificación.
             DataTable tablaLogin = dato.Log_Usu(txtUsuarioLogin.Text, txtPassLogin.Text);
 
             // Si hay al menos una fila, significa que el usuario ingresado existe.
