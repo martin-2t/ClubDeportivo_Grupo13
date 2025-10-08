@@ -23,9 +23,10 @@ namespace ClubDeportivo
         // Método que se ejecuta al cargar el formulario.
         private void frmLogin_Load(object sender, EventArgs e)
         {
-            //txtUsuarioLogin.PlaceholderText = "USUARIO";
-            //txtPassLogin.PlaceholderText = "CONTRASEÑA";
-            txtPassLogin.UseSystemPasswordChar = true;
+            //txtUsuarioLogin.PlaceholderText = "Nombre del usuario";
+            //txtPassLogin.PlaceholderText = "Ingresar contraseña";
+            //txtPassLogin.UseSystemPasswordChar = true;
+
         }
 
 
@@ -59,6 +60,53 @@ namespace ClubDeportivo
             {
                 // Si no hay coincidencia, es decir, no hay filas, mostramos mensaje de error.
                 MessageBox.Show("Usuario y/o password incorrecto");
+            }
+        }
+
+        // Simula .placeholder ya que no lo tenemos instalado en esta version.
+
+        private void txtUsuarioLogin_Enter(object sender, EventArgs e)
+        {
+            if (txtUsuarioLogin.Text == "Nombre del usuario")
+            {
+                txtUsuarioLogin.Text = "";
+                txtUsuarioLogin.ForeColor = Color.Black;
+            }
+        }
+
+        private void txtUsuarioLogin_Leave(object sender, EventArgs e)
+        {
+
+            if (txtUsuarioLogin.Text == "")
+            {
+                txtUsuarioLogin.Text = "Nombre del usuario";
+                txtUsuarioLogin.ForeColor = Color.DarkGray;
+
+            }
+
+        }
+        private void txtPassLogin_Enter(object sender, EventArgs e)
+        {
+            if (txtPassLogin.Text == "Ingresar clave")
+            {
+                txtPassLogin.Text = "";
+                txtPassLogin.ForeColor = Color.Black;
+                txtPassLogin.UseSystemPasswordChar = true;
+            }
+
+        }
+
+        // No funciona en nuestra versión porque es vieja y hay un bug
+        // Después podemos ver si vale la pena actualizarla
+        // Pero el código está bien, si no hubiera un bug con UseSystemPasswordChar actualizaría como lo hace el otro txt.
+        private void txtPassLogin_Leave(object sender, EventArgs e)
+        {
+            if (txtPassLogin.Text == "")
+            {
+                txtPassLogin.Text = "Ingresar clave";
+                txtPassLogin.ForeColor = Color.DarkGray;
+                txtPassLogin.UseSystemPasswordChar = false;
+
             }
         }
 
