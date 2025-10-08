@@ -36,6 +36,23 @@ CREATE TABLE usuarios (
 INSERT INTO usuarios (nombre_usuario, password_usuario, id_rol)
 VALUES ('Administrador', '123456', 1);
 
+
+-- *************************************
+-- --> TABLA DE TIPOS_DOCUMENTO
+-- *************************************
+
+CREATE TABLE tipos_documento(
+	id_tipo_documento INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(30) NOT NULL
+);
+
+
+-- Registra los tipos de documentos posibles.
+INSERT INTO tipos_documento(nombre) VALUES
+('DNI'),
+('Pasaporte');
+
+
 -- *************************************
 -- --> TABLA DE CLIENTES
 -- *************************************
@@ -45,27 +62,31 @@ CREATE TABLE clientes(
     fecha_alta TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     nombre VARCHAR(30) NOT NULL,
     apellido VARCHAR(30) NOT NULL,
-    email VARCHAR(40) NOT NULL,
+	tipo_documento INT UNSIGNED NOT NULL,
+    numero_documento VARCHAR(20) NOT NULL,
+    email VARCHAR(40),
     telefono VARCHAR(20),
     es_socio BOOLEAN NOT NULL,
     apto_fisico BOOLEAN NOT NULL,
 	estado VARCHAR(15) DEFAULT 'activo',
-    CONSTRAINT pk_cliente PRIMARY KEY (id_cliente)
+    CONSTRAINT pk_cliente PRIMARY KEY (id_cliente),
+    CONSTRAINT fk_tipo_documento FOREIGN KEY (tipo_documento) REFERENCES tipos_documento(id_tipo_documento),
+    CONSTRAINT uq_numero_documento UNIQUE (tipo_documento, numero_documento) 
 );
 
 -- Registra socios (activos y morosos) y no socios.
-INSERT INTO clientes(nombre, apellido, email, telefono, es_socio, apto_fisico, estado)
+INSERT INTO clientes(nombre, apellido, tipo_documento, numero_documento, email, telefono, es_socio, apto_fisico, estado)
 VALUES 
-('Lucas', 'Gomez', 'lucas.gomez@mail.com', '111-1234', TRUE, TRUE, 'activo'),
-('Mariana', 'Lopez', 'mariana.lopez@mail.com', '111-5678', TRUE, TRUE, 'activo'),
-('Javier', 'Fernandez', 'javier.fernandez@mail.com', '111-9012', TRUE, TRUE, 'moroso'),
-('Valentina', 'Sanchez', 'valentina.sanchez@mail.com', '111-3456', TRUE, TRUE, 'moroso'),
-('Sofia', 'Martinez', 'sofia.martinez@mail.com', '111-7890', FALSE, TRUE, NULL),
-('Mateo', 'Diaz', 'mateo.diaz@mail.com', '111-2345', FALSE, TRUE, NULL),
-('Camila', 'Torres', 'camila.torres@mail.com', '111-6789', TRUE, TRUE, 'moroso'),
-('Nicolas', 'Ruiz', 'nicolas.ruiz@mail.com', '111-0123', TRUE, TRUE, 'activo'),
-('Laura', 'Castro', 'laura.castro@mail.com', '111-4567', FALSE, TRUE, NULL),
-('Federico', 'Vega', 'federico.vega@mail.com', '111-8901', TRUE, TRUE, 'activo');
+('Lucas', 'Gomez', 1, '1234567890', 'lucas.gomez@mail.com', '111-1234', TRUE, TRUE, 'activo'),
+('Mariana', 'Lopez', 1, '2234567890', 'mariana.lopez@mail.com', '111-5678', TRUE, TRUE, 'activo'),
+('Javier', 'Fernandez', 1, '3234567890', 'javier.fernandez@mail.com', '111-9012', TRUE, TRUE, 'moroso'),
+('Valentina', 'Sanchez', 1, '4234567890', 'valentina.sanchez@mail.com', '111-3456', TRUE, TRUE, 'moroso'),
+('Sofia', 'Martinez', 1, '5234567890', 'sofia.martinez@mail.com', '111-7890', FALSE, TRUE, NULL),
+('Mateo', 'Diaz', 1, '6234567890', 'mateo.diaz@mail.com', '111-2345', FALSE, TRUE, NULL),
+('Camila', 'Torres', 1, '7234567890', 'camila.torres@mail.com', '111-6789', TRUE, TRUE, 'moroso'),
+('Nicolas', 'Ruiz', 1, '8234567890','nicolas.ruiz@mail.com', '111-0123', TRUE, TRUE, 'activo'),
+('Laura', 'Castro', 1, '9234567890', 'laura.castro@mail.com', '111-4567', FALSE, TRUE, NULL),
+('Federico', 'Vega', 1, '0234567890', 'federico.vega@mail.com', '111-8901', TRUE, TRUE, 'activo');
 
 
 -- Actualiza fecha_alta para que tengan sentido los registros de pago.
@@ -206,14 +227,60 @@ VALUES
 
 DROP PROCEDURE IF EXISTS IngresoLogin;
 
-DELIMITER //IngresoLogin
+DELIMITER //
 
 CREATE PROCEDURE IngresoLogin(IN usuario VARCHAR(30), IN clave VARCHAR(60))
 BEGIN
 	SELECT R.nombre
-    FROM usuarios U INNER JOIN roles R on R.id_rol = U.id_usuario
+    FROM usuarios U INNER JOIN roles R on R.id_rol = U.id_rol
     WHERE U.nombre_usuario = usuario and U.password_usuario = clave and U.activo = 1;
 
+END //
+
+DELIMITER ;
+
+
+-- *************************************
+-- --> PROCEDIMIENTO NuevoCliente
+-- *************************************
+
+
+DROP PROCEDURE IF EXISTS NuevoCliente;
+
+DELIMITER //
+
+CREATE PROCEDURE NuevoCliente( 
+								IN nombre VARCHAR(30), 
+                                IN apellido VARCHAR(30), 
+                                IN tipo_documento INT, 
+                                IN numero_documento VARCHAR(20), 
+                                IN email VARCHAR(40),
+                                IN telefono VARCHAR(20),
+                                IN es_socio BOOLEAN,
+                                IN apto_fisico BOOLEAN,
+                                IN estado VARCHAR(15),
+                                OUT respuesta INT
+                                )
+BEGIN
+
+	DECLARE existe INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO existe
+    FROM clientes C
+    WHERE C.tipo_documento = tipo_documento AND C.numero_documento = numero_documento;
+    
+    IF existe = 0 THEN
+		INSERT INTO clientes(nombre, apellido, tipo_documento, numero_documento, email, telefono, es_socio, apto_fisico, estado)
+        VALUES
+        (nombre, apellido, tipo_documento, numero_documento, email, telefono, es_socio, apto_fisico, estado);
+        
+        SET respuesta = last_insert_id();
+        
+	ELSE
+		SET respuesta = -1;
+        
+	END IF;
+        
 END //
 
 DELIMITER ;
