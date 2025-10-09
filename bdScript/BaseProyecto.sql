@@ -129,7 +129,7 @@ VALUES
 CREATE TABLE cuotas_mensuales(
 	id_cuota INT UNSIGNED AUTO_INCREMENT,
     id_cliente INT UNSIGNED NOT NULL,
-    monto FLOAT NOT NULL,
+    monto DECIMAL(10,2) NOT NULL,
     fecha_emision DATE NOT NULL,
     fecha_vencimiento DATE NOT NULL,
     fecha_pago DATE DEFAULT NULL,
@@ -241,46 +241,144 @@ DELIMITER ;
 
 
 -- *************************************
--- --> PROCEDIMIENTO NuevoCliente
+-- --> PROCEDIMIENTO NuevoSocio
 -- *************************************
 
 
-DROP PROCEDURE IF EXISTS NuevoCliente;
+DROP PROCEDURE IF EXISTS NuevoSocio;
 
 DELIMITER //
 
-CREATE PROCEDURE NuevoCliente( 
+CREATE PROCEDURE NuevoSocio( 
 								IN nombre VARCHAR(30), 
                                 IN apellido VARCHAR(30), 
                                 IN tipo_documento INT, 
                                 IN numero_documento VARCHAR(20), 
                                 IN email VARCHAR(40),
                                 IN telefono VARCHAR(20),
-                                IN es_socio BOOLEAN,
                                 IN apto_fisico BOOLEAN,
-                                IN estado VARCHAR(15),
-                                OUT respuesta INT
+                                IN modo_pago VARCHAR(20),
+                                IN promocion VARCHAR(30),
+                                IN monto DECIMAL(10,2),
+                                OUT respuesta INT,
+                                OUT fecha_alta TIMESTAMP
                                 )
 BEGIN
 
 	DECLARE existe INT DEFAULT 0;
+    DECLARE paga INT DEFAULT 0;
     
     SELECT COUNT(*) INTO existe
     FROM clientes C
     WHERE C.tipo_documento = tipo_documento AND C.numero_documento = numero_documento;
     
     IF existe = 0 THEN
-		INSERT INTO clientes(nombre, apellido, tipo_documento, numero_documento, email, telefono, es_socio, apto_fisico, estado)
+    
+		START TRANSACTION;
+        
+		INSERT INTO clientes(nombre, apellido, tipo_documento, numero_documento, email, telefono, es_socio, apto_fisico)
         VALUES
-        (nombre, apellido, tipo_documento, numero_documento, email, telefono, es_socio, apto_fisico, estado);
+        (nombre, apellido, tipo_documento, numero_documento, email, telefono, true, apto_fisico);
         
         SET respuesta = last_insert_id();
         
+        CALL NuevoSocioCuota(respuesta, monto, modo_pago, promocion, paga);
+        
+        IF paga = -1 THEN
+			ROLLBACK;
+            SET respuesta = -2;
+            SET fecha_alta = NULL;
+		ELSE
+			SELECT C.fecha_alta INTO fecha_alta
+			FROM clientes C
+			WHERE C.id_cliente = respuesta;
+            COMMIT;
+		END IF;
 	ELSE
 		SET respuesta = -1;
+        SET fecha_alta = NULL;
         
 	END IF;
         
+END //
+
+DELIMITER ;
+
+
+-- *************************************
+-- --> PROCEDIMIENTO NuevoSocioCuota
+-- *************************************
+
+
+DROP PROCEDURE IF EXISTS NuevoSocioCuota;
+
+DELIMITER //
+
+CREATE PROCEDURE NuevoSocioCuota( 
+								IN id_cliente INT, 
+                                IN monto DECIMAL(10,2), 
+                                IN modo_pago VARCHAR(20),
+                                IN promocion VARCHAR(30),
+                                OUT resultado INT
+                                )
+BEGIN
+
+	DECLARE id_cuota INT;
+    
+    INSERT INTO cuotas_mensuales(id_cliente, monto, fecha_emision, fecha_vencimiento, estado, modo_pago, promocion) 
+    VALUES (id_cliente, monto, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), 'pendiente', modo_pago, promocion );
+    
+    SET id_cuota = LAST_INSERT_ID();
+    
+    -- Llama a PagarCuotaMensual
+    CALL PagarCuotaMensual(id_cuota, modo_pago, promocion, resultado);
+    
+    IF resultado = 0 THEN
+        SET resultado = -1;
+	ELSE
+		SET resultado = 1;
+	END IF;
+        
+END //
+
+DELIMITER ;
+
+-- *************************************
+-- --> PROCEDIMIENTO PagarCuotaMensual
+-- *************************************
+
+
+DROP PROCEDURE IF EXISTS PagarCuotaMensual;
+
+DELIMITER //
+
+CREATE PROCEDURE PagarCuotaMensual( 
+								IN id_cuota INT, 
+                                IN modo_pago VARCHAR(20),
+                                IN promocion VARCHAR(30),
+                                OUT resultado INT
+                                )
+BEGIN
+
+	DECLARE existe INT;
+    
+    SELECT COUNT(*) INTO existe
+    FROM cuotas_mensuales CM
+    WHERE CM.id_cuota = id_cuota;
+    
+    IF existe = 0 THEN
+		SET resultado = 0;
+	ELSE
+		UPDATE cuotas_mensuales CM
+        SET CM.fecha_pago = CURDATE(),
+        CM.modo_pago = modo_pago,
+        CM.promocion = promocion,
+        CM.estado = 'pagada'
+        WHERE CM.id_cuota = id_cuota;
+		
+        SET resultado = 1;
+	END IF;
+    
 END //
 
 DELIMITER ;
