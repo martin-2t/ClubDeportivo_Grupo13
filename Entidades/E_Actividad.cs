@@ -6,13 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClubDeportivo.Entidades
 {
-    internal class E_CuotaMensual : E_Cuota
+    internal class E_Actividad
     {
-        public static decimal MontoFijo => 20000;
-
-        public override decimal Monto => MontoFijo;
-
-
-
     }
 }

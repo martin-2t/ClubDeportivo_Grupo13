@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace ClubDeportivo.Entidades
 {
+
+    // Constructor
     internal class E_Socio : E_Cliente
     {
         public E_Socio( string nombre,
@@ -13,14 +15,16 @@ namespace ClubDeportivo.Entidades
                         string email,
                         string telefono,
                         int tipoDocumento,
-                        string numeroDocuento,
+                        string numeroDocumento,
                         bool aptoFisico
                       ) 
                         : base ( nombre, apellido, email, telefono, 
-                                tipoDocumento, numeroDocuento, aptoFisico)
+                                tipoDocumento, numeroDocumento, aptoFisico)
         {
             EsSocio = true;
         }
+
+        // Método imprimir carnet.
         public string ImprimirCarnet()
         {
             StringBuilder carnet = new StringBuilder();
@@ -33,7 +37,6 @@ namespace ClubDeportivo.Entidades
             carnet.AppendLine($"Teléfono: {Telefono}");
             carnet.AppendLine($"Fecha de Alta: {FechaAlta:dd/MM/yyyy}");
             carnet.AppendLine($"Apto físico: {(AptoFisico ? "Sí" : "No")}");
-            //carnet.AppendLine($"Estado: {estado}");
             carnet.AppendLine("***************************");
 
             return carnet.ToString();

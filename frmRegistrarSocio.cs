@@ -44,15 +44,14 @@ namespace ClubDeportivo
             }
             else
             {
-                E_Socio socio = new E_Socio();
-                socio.EsSocio = true;
-                socio.Nombre = txtNombre.Text;
-                socio.Apellido = txtApellido.Text;
-                socio.NumeroDocumento = txtNumDoc.Text;
-                socio.Telefono = txtTelefono.Text;
-                socio.Email = txtEmail.Text;
-                socio.AptoFisico = true;
-                socio.TipoDocumento = (cboTipoDoc.Text == "DNI") ? 1 : 2;
+                E_Socio socio = new E_Socio( txtNombre.Text,
+                                             txtApellido.Text,
+                                             txtEmail.Text,
+                                             txtTelefono.Text,
+                                             (cboTipoDoc.Text == "DNI") ? 1: 2, 
+                                             txtNumDoc.Text,
+                                             true
+                                             );
 
                 E_CuotaMensual cuotaMensual = new E_CuotaMensual();
                 cuotaMensual.ModoPago = cboModoPago.Text;
@@ -178,7 +177,7 @@ namespace ClubDeportivo
 
         private void frmRegistrarSocio_Load(object sender, EventArgs e)
         {
-            lblMontoCuotaMensual.Text = Convert.ToString(E_CuotaMensual.monto);
+            lblMontoCuotaMensual.Text = Convert.ToString(E_CuotaMensual.MontoFijo.ToString());
         }
 
         private void lblAstPromocion_Click(object sender, EventArgs e)
