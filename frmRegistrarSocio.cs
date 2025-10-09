@@ -45,14 +45,14 @@ namespace ClubDeportivo
             else
             {
                 E_Socio socio = new E_Socio();
-                socio.es_socio = true;
-                socio.nombre = txtNombre.Text;
-                socio.apellido = txtApellido.Text;
-                socio.numero_documento = txtNumDoc.Text;
-                socio.telefono = txtTelefono.Text;
-                socio.email = txtEmail.Text;
-                socio.apto_fisico = true;
-                socio.tipo_documento = (cboTipoDoc.Text == "DNI") ? 1 : 2;
+                socio.EsSocio = true;
+                socio.Nombre = txtNombre.Text;
+                socio.Apellido = txtApellido.Text;
+                socio.NumeroDocumento = txtNumDoc.Text;
+                socio.Telefono = txtTelefono.Text;
+                socio.Email = txtEmail.Text;
+                socio.AptoFisico = true;
+                socio.TipoDocumento = (cboTipoDoc.Text == "DNI") ? 1 : 2;
 
                 E_CuotaMensual cuotaMensual = new E_CuotaMensual();
                 cuotaMensual.ModoPago = cboModoPago.Text;

@@ -28,14 +28,14 @@ namespace ClubDeportivo.Datos
                 comando.CommandType = CommandType.StoredProcedure;
 
                 // definimos los parametros que tiene el procedure
-                comando.Parameters.Add("nombre", MySqlDbType.VarChar).Value = socio.nombre;
-                comando.Parameters.Add("apellido", MySqlDbType.VarChar).Value = socio.apellido;
-                comando.Parameters.Add("tipo_documento", MySqlDbType.Int32).Value = socio.tipo_documento;
-                comando.Parameters.Add("numero_documento", MySqlDbType.VarChar).Value = socio.numero_documento;
-                comando.Parameters.Add("email", MySqlDbType.VarChar).Value = socio.email;
-                comando.Parameters.Add("telefono", MySqlDbType.VarChar).Value = socio.telefono;
-                comando.Parameters.Add("es_socio", MySqlDbType.Bit).Value = socio.es_socio;
-                comando.Parameters.Add("apto_fisico", MySqlDbType.Bit).Value = socio.apto_fisico;
+                comando.Parameters.Add("nombre", MySqlDbType.VarChar).Value = socio.Nombre;
+                comando.Parameters.Add("apellido", MySqlDbType.VarChar).Value = socio.Apellido;
+                comando.Parameters.Add("tipo_documento", MySqlDbType.Int32).Value = socio.TipoDocumento;
+                comando.Parameters.Add("numero_documento", MySqlDbType.VarChar).Value = socio.NumeroDocumento;
+                comando.Parameters.Add("email", MySqlDbType.VarChar).Value = socio.Email;
+                comando.Parameters.Add("telefono", MySqlDbType.VarChar).Value = socio.Telefono;
+                comando.Parameters.Add("es_socio", MySqlDbType.Bit).Value = socio.EsSocio;
+                comando.Parameters.Add("apto_fisico", MySqlDbType.Bit).Value = socio.AptoFisico;
                 comando.Parameters.Add("modo_pago", MySqlDbType.VarChar).Value = cuotaMensual.ModoPago;
                 comando.Parameters.Add("promocion", MySqlDbType.VarChar).Value = cuotaMensual.Promocion;
                 comando.Parameters.Add("monto", MySqlDbType.Decimal).Value = cuotaMensual.Monto;
@@ -72,10 +72,10 @@ namespace ClubDeportivo.Datos
 
                 if ( respuesta.Value != DBNull.Value && Convert.ToInt32(respuesta.Value) > 0)
                 {
-                    socio.id_cliente = Convert.ToInt32(respuesta.Value);
+                    socio.Id = Convert.ToInt32(respuesta.Value);
 
                     if (fecha_alta.Value != DBNull.Value )
-                        socio.fecha_alta = Convert.ToDateTime(fecha_alta.Value);
+                        socio.FechaAlta = Convert.ToDateTime(fecha_alta.Value);
                 }
 
                 salida = Convert.ToString(respuesta.Value);
