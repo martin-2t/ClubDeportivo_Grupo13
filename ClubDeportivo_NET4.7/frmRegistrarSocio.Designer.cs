@@ -122,6 +122,7 @@
             this.lblNombre.Size = new System.Drawing.Size(68, 20);
             this.lblNombre.TabIndex = 13;
             this.lblNombre.Text = "Nombre";
+            this.lblNombre.Click += new System.EventHandler(this.lblNombre_Click);
             // 
             // txtApellido
             // 
