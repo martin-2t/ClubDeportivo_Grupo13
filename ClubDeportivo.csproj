@@ -247,8 +247,12 @@
     <Compile Include="Datos\Clientes.cs" />
     <Compile Include="Datos\Conexion.cs" />
     <Compile Include="Datos\Usuarios.cs" />
+    <Compile Include="Entidades\E_Actividad.cs" />
     <Compile Include="Entidades\E_Cliente.cs" />
+    <Compile Include="Entidades\E_Cuota.cs" />
+    <Compile Include="Entidades\E_CuotaDiaria.cs" />
     <Compile Include="Entidades\E_CuotaMensual.cs" />
+    <Compile Include="Entidades\E_NoSocio.cs" />
     <Compile Include="Entidades\E_Socio.cs" />
     <Compile Include="frmListaMorosos.cs">
       <SubType>Form</SubType>
