@@ -70,6 +70,7 @@
             this.txtUsuarioLogin.Size = new System.Drawing.Size(179, 22);
             this.txtUsuarioLogin.TabIndex = 2;
             this.txtUsuarioLogin.Text = "Nombre del usuario";
+            this.txtUsuarioLogin.TextChanged += new System.EventHandler(this.txtUsuarioLogin_TextChanged);
             this.txtUsuarioLogin.Enter += new System.EventHandler(this.txtUsuarioLogin_Enter);
             this.txtUsuarioLogin.Leave += new System.EventHandler(this.txtUsuarioLogin_Leave);
             // 

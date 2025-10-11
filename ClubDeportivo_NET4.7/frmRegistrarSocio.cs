@@ -184,5 +184,10 @@ namespace ClubDeportivo
         {
 
         }
+
+        private void lblNombre_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

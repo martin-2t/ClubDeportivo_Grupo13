@@ -110,5 +110,9 @@ namespace ClubDeportivo
             }
         }
 
+        private void txtUsuarioLogin_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
