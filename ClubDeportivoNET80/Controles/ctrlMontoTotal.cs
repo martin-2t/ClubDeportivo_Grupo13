@@ -12,9 +12,21 @@ namespace ClubDeportivoNET80.Controles
 {
     public partial class ctrlMontoTotal : UserControl
     {
+        // Constructor.
         public ctrlMontoTotal()
         {
             InitializeComponent();
         }
+
+        // Recibe un decimal, lo redondea a 2 decimales
+        // y lo carga a la propiedad texto de la etiqueta Monto.
+        public void CargarMonto(decimal monto) 
+        {
+            lblMonto.Text = decimal.Round(monto,2).ToString("N2");
+        }
+
+
+
+    // FIN
     }
 }

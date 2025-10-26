@@ -28,10 +28,49 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            grpMontoTotal = new GroupBox();
+            lblMonto = new Label();
+            grpMontoTotal.SuspendLayout();
+            SuspendLayout();
+            // 
+            // grpMontoTotal
+            // 
+            grpMontoTotal.Controls.Add(lblMonto);
+            grpMontoTotal.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            grpMontoTotal.Location = new Point(25, 18);
+            grpMontoTotal.Name = "grpMontoTotal";
+            grpMontoTotal.Size = new Size(532, 125);
+            grpMontoTotal.TabIndex = 0;
+            grpMontoTotal.TabStop = false;
+            grpMontoTotal.Text = "El total del monto a pagar es:";
+            grpMontoTotal.Enter += grpMontoTotal_Enter;
+            // 
+            // lblMonto
+            // 
+            lblMonto.AutoSize = true;
+            lblMonto.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblMonto.Location = new Point(95, 57);
+            lblMonto.Name = "lblMonto";
+            lblMonto.Size = new Size(55, 31);
+            lblMonto.TabIndex = 0;
+            lblMonto.Text = "0.00";
+            // 
+            // ctrlMontoTotal
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(grpMontoTotal);
+            Name = "ctrlMontoTotal";
+            Size = new Size(577, 167);
+            Load += ctrlMontoTotal_Load;
+            grpMontoTotal.ResumeLayout(false);
+            grpMontoTotal.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private GroupBox grpMontoTotal;
+        private Label lblMonto;
     }
 }
