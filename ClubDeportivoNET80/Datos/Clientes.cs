@@ -12,8 +12,7 @@ namespace ClubDeportivoNET80.Datos
     internal class Clientes
     {
 
-
-        public string? Nuevo_Socio(E_Socio socio, E_CuotaMensual cuotaMensual)
+        public string? RegistrarSocio(E_Socio socio, E_CuotaMensual cuotaMensual)
         {
             string? salida = null;
 
