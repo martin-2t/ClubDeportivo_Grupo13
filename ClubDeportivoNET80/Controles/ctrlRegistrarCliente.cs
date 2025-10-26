@@ -41,30 +41,51 @@ namespace ClubDeportivoNET80.Controles
 
         }
 
-        // Chequea si falta algun dato, si es así, manda mensaje.
-        public void EstaVacio()
+        // Chequea si falta algun dato, si es así, devuelve true.
+        public bool EstaVacio()
         {
-            if ( string.IsNullOrWhiteSpace(txtNombre.Text)   ||
-                 string.IsNullOrWhiteSpace(txtApellido.Text) ||
-                 string.IsNullOrWhiteSpace(cboTipoDoc.Text)  ||
-                 string.IsNullOrWhiteSpace(txtNumDoc.Text)   ||
-                 string.IsNullOrWhiteSpace(txtTelefono.Text) ||
-                 string.IsNullOrWhiteSpace(txtEmail.Text)    ||
-                 !chkAptoFisico.Checked
-                )
-            {
-                MessageBox.Show(
-                                "Debe completar datos requeridos (*) ",
-                                "AVISO DEL SISTEMA", 
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error
-                );
-            }
+
+            return ( string.IsNullOrWhiteSpace(txtNombre.Text)   ||
+                     string.IsNullOrWhiteSpace(txtApellido.Text) ||
+                     string.IsNullOrWhiteSpace(cboTipoDoc.Text)  ||
+                     string.IsNullOrWhiteSpace(txtNumDoc.Text)   ||
+                     string.IsNullOrWhiteSpace(txtTelefono.Text) ||
+                     string.IsNullOrWhiteSpace(txtEmail.Text)    ||
+                     !chkAptoFisico.Checked);
+
         }
 
+        // Devuelven los valores de cada campo.
 
+        public string ObtenerNombre()
+        {
+            return txtNombre.Text;
+        }
 
+        public string ObtenerApellido()
+        {
+            return txtApellido.Text;
+        }
 
+        public string ObtenerEmail()
+        {
+            return txtEmail.Text;
+        }
+
+        public string ObtenerTelefono()
+        {
+            return txtTelefono.Text;
+        }
+
+        public string ObtenerNumDoc()
+        {
+            return txtNumDoc.Text;
+        }
+
+        public int ObtenerTipoDoc()
+        {
+            return (cboTipoDoc.SelectedIndex.ToString() == "DNI") ? 1 : 2;
+        }
 
 
         // FIN
