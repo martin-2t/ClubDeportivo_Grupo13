@@ -220,7 +220,7 @@ namespace ClubDeportivoNET80.Datos
             }
             finally
             {
-                Conexion.AbrirConexion(sqlCon);
+                Conexion.CerrarConexion(sqlCon);
 
             }
 
