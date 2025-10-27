@@ -45,7 +45,7 @@ namespace ClubDeportivoNET80
 
         private void btnRegistrarNoSocio_Click(object sender, EventArgs e)
         {
-            frmRegistrarNoSocio registrarNoSocio = new frmRegistrarNoSocio();
+            frmRegistrarNoSocio registrarNoSocio = new frmRegistrarNoSocio(this);
             registrarNoSocio.Show();
             this.Hide();
 
