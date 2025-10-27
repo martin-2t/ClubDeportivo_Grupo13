@@ -53,7 +53,7 @@ namespace ClubDeportivoNET80
 
         private void btnPagarCuota_Click(object sender, EventArgs e)
         {
-            frmPagarCuota pagarCuota = new frmPagarCuota();
+            frmPagarCuota pagarCuota = new frmPagarCuota(this);
             pagarCuota.Show();
             this.Hide();
 

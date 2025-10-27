@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClubDeportivoNET80.Entidades;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,17 +13,23 @@ namespace ClubDeportivoNET80
 {
     public partial class frmPagarCuotaMensual : Form
     {
-        public frmPagarCuotaMensual()
+        private E_Socio socio;
+        public frmPagarCuotaMensual(E_Socio socio)
         {
             InitializeComponent();
+            this.socio = socio;
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            frmPrincipal principal = new frmPrincipal();
-            principal.Show();
             this.Close();
 
         }
+
+
+
+
+
+        // FIN
     }
 }
