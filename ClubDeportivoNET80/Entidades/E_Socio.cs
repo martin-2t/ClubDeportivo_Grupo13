@@ -10,7 +10,10 @@ namespace ClubDeportivoNET80.Entidades
 {
     internal class E_Socio : E_Cliente
     {
-        // Constructor
+
+        private List<E_CuotaMensual>? cuotas;
+
+        // Constructor usado por frm.RegistrarSocio
         public E_Socio(string nombre,
                         string apellido,
                         string email,
@@ -25,25 +28,29 @@ namespace ClubDeportivoNET80.Entidades
             EsSocio = true;
         }
 
-        // Método imprimir carnet.
-        public string ImprimirCarnet()
+
+        // Constructor usado por Datos.Clientes.ObtenerCliente()
+        public E_Socio(int id,
+            string nombre,
+            string apellido,
+            string estado
+        ) : base(id, nombre, apellido)
         {
-            StringBuilder carnet = new StringBuilder();
+            EsSocio = true;
+            Estado = estado;
+        }
 
-            carnet.AppendLine("***** CARNET DE SOCIO *****");
-            carnet.AppendLine($"ID Socio: {Id}");
-            carnet.AppendLine($"Nombre: {Nombre} {Apellido}");
-            carnet.AppendLine($"Documento: {(TipoDocumento == 1 ? "DNI" : "Pasaporte")} - {NumeroDocumento}");
-            carnet.AppendLine($"Email: {Email}");
-            carnet.AppendLine($"Teléfono: {Telefono}");
-            carnet.AppendLine($"Fecha de Alta: {FechaAlta:dd/MM/yyyy}");
-            carnet.AppendLine($"Apto físico: {(AptoFisico ? "Sí" : "No")}");
-            carnet.AppendLine("***************************");
+        // Constructor usado por Datos.Clientes.ObtenerSociosMorosos()
+        public E_Socio(int id,
+            string nombre,
+            string apellido
+        ) : base(id, nombre, apellido)
+        {
 
-            return carnet.ToString();
         }
 
 
 
+        //FIN
     }
 }

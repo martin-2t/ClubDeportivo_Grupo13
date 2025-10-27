@@ -1,11 +1,11 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-
-using MySql.Data.MySqlClient;
 
 namespace ClubDeportivoNET80.Datos
 {
@@ -72,6 +72,7 @@ namespace ClubDeportivoNET80.Datos
             return cadena;
         }
 
+
         public static Conexion getInstancia()
         {
             if (con == null) // quiere decir que la conexion esta cerrada
@@ -80,5 +81,35 @@ namespace ClubDeportivoNET80.Datos
             }
             return con;
         }
+
+        // Si la conexion no es nula, la abre, sino sale.
+        public static void AbrirConexion(MySqlConnection? sqlCon)
+        {
+            if (sqlCon != null)
+            {
+                sqlCon.Open();
+            }
+            else
+            {
+                throw new InvalidOperationException(
+                        "La conexión no fue creada" +
+                        "Verifique la configuración de la clase 'Conexion'.");
+            }
+
+        }
+
+        // Si no es nula y está abierta, la cierra.
+        public static void CerrarConexion(MySqlConnection? sqlCon)
+        {
+
+            if (sqlCon != null && sqlCon.State == ConnectionState.Open) 
+            { 
+                sqlCon.Close(); 
+            }
+
+        }
+
+
+    // FIN
     }
 }

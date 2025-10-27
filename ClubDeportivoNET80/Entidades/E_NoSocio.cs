@@ -9,7 +9,7 @@ namespace ClubDeportivoNET80.Entidades
     internal class E_NoSocio : E_Cliente
     {
 
-
+        // Constructor usado por frmRegistrarNoSocio
         public E_NoSocio(string nombre,
                    string apellido,
                    string email,
@@ -24,9 +24,18 @@ namespace ClubDeportivoNET80.Entidades
             EsSocio = false;
         }
 
+        // Constructor usado por Datos.Clientes.ObtenerCliente()
+        public E_NoSocio(int id,
+            string nombre,
+            string apellido
+        ) : base(id, nombre, apellido)
+        {
+            EsSocio = false;
+
+        }
 
 
 
-
+        // FIN
     }
 }

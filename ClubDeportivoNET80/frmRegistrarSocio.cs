@@ -88,8 +88,7 @@ namespace ClubDeportivoNET80
                 cuotaMensual.ModoPago = cboModoPago.Text;
                 cuotaMensual.Promocion = cboPromocion.Text;
 
-                Clientes dato = new Clientes();
-                string? respuesta = dato.RegistrarSocio(socio, cuotaMensual);
+                string? respuesta = Clientes.RegistrarSocio(socio, cuotaMensual);
 
                 procesarRespuestaRegistro(respuesta, socio);
 
