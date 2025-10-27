@@ -20,7 +20,7 @@ namespace ClubDeportivoNET80.Controles
         // Devuelve un string con el nombre del item seleccionado.
         public string ObtenerModoPago()
         {
-            return this.cboModoPago.SelectedItem?.ToString() ?? "";
+            return this.cboModoPago.Text;
         }
 
         // Devuelve un string con el nombre del item seleccionado.
@@ -34,7 +34,7 @@ namespace ClubDeportivoNET80.Controles
         // de lo contrario lo oculta.
         private void cboModoPago_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cboModoPago.SelectedItem != null 
+            if (cboModoPago.SelectedItem != null
                 && cboModoPago.Text == "Tarjeta")
             {
                 lblPromocion.Visible = true;

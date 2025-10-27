@@ -37,13 +37,12 @@
             // 
             grpMontoTotal.Controls.Add(lblMonto);
             grpMontoTotal.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            grpMontoTotal.Location = new Point(25, 18);
+            grpMontoTotal.Location = new Point(14, 16);
             grpMontoTotal.Name = "grpMontoTotal";
-            grpMontoTotal.Size = new Size(532, 125);
+            grpMontoTotal.Size = new Size(373, 125);
             grpMontoTotal.TabIndex = 0;
             grpMontoTotal.TabStop = false;
             grpMontoTotal.Text = "El total del monto a pagar es:";
-            grpMontoTotal.Enter += grpMontoTotal_Enter;
             // 
             // lblMonto
             // 
@@ -61,8 +60,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(grpMontoTotal);
             Name = "ctrlMontoTotal";
-            Size = new Size(577, 167);
-            Load += ctrlMontoTotal_Load;
+            Size = new Size(397, 154);
             grpMontoTotal.ResumeLayout(false);
             grpMontoTotal.PerformLayout();
             ResumeLayout(false);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClubDeportivoNET80.Entidades
 {
-    internal class E_CuotaDiaria : E_Cuota
+    public class E_CuotaDiaria : E_Cuota
     {
     }
 }

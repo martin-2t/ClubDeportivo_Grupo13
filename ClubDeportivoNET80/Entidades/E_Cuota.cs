@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClubDeportivoNET80.Entidades
 {
-    internal abstract class E_Cuota
+    public abstract class E_Cuota
     {
         
         // Propiedades

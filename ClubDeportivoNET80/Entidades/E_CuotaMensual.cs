@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ClubDeportivoNET80.Entidades
 {
-    internal class E_CuotaMensual : E_Cuota
+    public class E_CuotaMensual : E_Cuota
     {
 
-        // Contrusctor usado por Datos.Cuotas
+        // Constructor usado por Datos.Cuotas
         public E_CuotaMensual(int id,
             decimal monto,
             DateTime fechaVencimiento,

@@ -8,7 +8,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace ClubDeportivoNET80.Entidades
 {
-    internal class E_Socio : E_Cliente
+    public class E_Socio : E_Cliente
     {
 
         private List<E_CuotaMensual>? cuotas;

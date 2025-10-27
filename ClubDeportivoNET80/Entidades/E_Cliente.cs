@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClubDeportivoNET80.Entidades
 {
-    internal class E_Cliente
+    public class E_Cliente
     {
 
         // Constructor minimo

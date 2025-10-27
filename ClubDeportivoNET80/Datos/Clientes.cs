@@ -12,7 +12,7 @@ namespace ClubDeportivoNET80.Datos
     internal class Clientes
     {
 
-        public static string? RegistrarSocio(E_Socio socio, E_CuotaMensual cuotaMensual)
+        public static string? RegistrarSocio(E_Socio socio, string modoPago, string promocion)
         {
             // Inicialización de la variable de salida
             string? salida = null;
@@ -37,9 +37,10 @@ namespace ClubDeportivoNET80.Datos
                 comando.Parameters.Add("telefono", MySqlDbType.VarChar).Value = socio.Telefono;
                 comando.Parameters.Add("es_socio", MySqlDbType.Bit).Value = socio.EsSocio;
                 comando.Parameters.Add("apto_fisico", MySqlDbType.Bit).Value = socio.AptoFisico;
-                comando.Parameters.Add("modo_pago", MySqlDbType.VarChar).Value = cuotaMensual.ModoPago;
-                comando.Parameters.Add("promocion", MySqlDbType.VarChar).Value = cuotaMensual.Promocion;
-                comando.Parameters.Add("monto", MySqlDbType.Decimal).Value = cuotaMensual.Monto;
+
+                comando.Parameters.Add("modo_pago", MySqlDbType.VarChar).Value = modoPago;
+                comando.Parameters.Add("promocion", MySqlDbType.VarChar).Value = promocion;
+                comando.Parameters.Add("monto", MySqlDbType.Decimal).Value = E_CuotaMensual.MontoFijo;
 
                 // definimos los parametros de salida
                 MySqlParameter respuesta = new MySqlParameter();
