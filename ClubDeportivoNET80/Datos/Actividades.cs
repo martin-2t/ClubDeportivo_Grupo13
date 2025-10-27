@@ -12,6 +12,9 @@ namespace ClubDeportivoNET80.Datos
     internal class Actividades
     {
 
+        // Obtiene las actividades desde la bd usando
+        // el procedimiento almacenado ObtenerActividades
+        // Devuelve la lista con dichas actividades.
         public static List<E_Actividad> ObtenerActividades()
         {
 
