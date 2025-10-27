@@ -261,6 +261,7 @@ namespace ClubDeportivoNET80.Datos
 
                 lector = comando.ExecuteReader();
 
+                // Mientras haya filas para leer, recorrerlas.
                 while (lector.Read())
                 {
                     E_Socio socio = new E_Socio(
@@ -269,6 +270,7 @@ namespace ClubDeportivoNET80.Datos
                                                 lector["apellido"]?.ToString() ?? ""
                     );
 
+                    // Agrega el socio moroso obtenido a la lista.
                     sociosMorosos.Add(socio);
 
                 }
