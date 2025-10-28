@@ -83,7 +83,10 @@ namespace ClubDeportivoNET80
             }
             else
             {
-                Cuotas.PagarCuotasMensuales(pendientes, ctrlModoPagoMensual.ObtenerModoPago(), ctrlModoPagoMensual.ObtenerPromocion());
+                Cuotas.PagarCuotasMensuales(pendientes, 
+                    ctrlModoPagoMensual.ObtenerModoPago(), 
+                    ctrlModoPagoMensual.ObtenerPromocion());
+
                 Clientes.ActualizarEstadoCliente(socio.Id);
 
                 MensajeSistema.MostrarInformacion("Procesamiento de pago exitoso");

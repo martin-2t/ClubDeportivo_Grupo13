@@ -110,6 +110,7 @@
             Controls.Add(txtNumeroCliente);
             Controls.Add(lblNumeroCliente);
             Name = "frmPagarCuota";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Pagar cuota";
             Load += frmPagarCuota_Load;
             ResumeLayout(false);
