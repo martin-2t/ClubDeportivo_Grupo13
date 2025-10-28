@@ -66,13 +66,11 @@ namespace ClubDeportivoNET80.Datos
         
         // Obtiene las cuotas pendientes y vencidas del cliente
         // junta a la última que pago. 
-        public static List<E_CuotaMensual> ObtenerCuotas(int idCliente)
+        public static List<E_CuotaMensual> ObtenerCuotas(int idCliente, List<E_CuotaMensual> cuotas)
         {
 
             MySqlConnection? sqlCon = null;
             MySqlDataReader? lector = null;
-
-            List<E_CuotaMensual> cuotas = new List<E_CuotaMensual>();
 
             try
             {

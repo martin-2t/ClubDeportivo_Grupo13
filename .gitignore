@@ -16,3 +16,4 @@ packages/
 *.log
 *.vs/
 /mysql.config.json
+/ClubDeportivoNET80/mysql.config.json

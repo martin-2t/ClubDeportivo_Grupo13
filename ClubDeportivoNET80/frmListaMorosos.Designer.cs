@@ -30,17 +30,22 @@
         {
             lblTitulo = new Label();
             btnVolver = new Button();
+            dtgvMorosos = new DataGridView();
+            colNum = new DataGridViewTextBoxColumn();
+            colApellido = new DataGridViewTextBoxColumn();
+            colNombre = new DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)dtgvMorosos).BeginInit();
             SuspendLayout();
             // 
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Segoe UI", 15F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitulo.Location = new Point(109, 84);
+            lblTitulo.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitulo.Location = new Point(50, 41);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(290, 35);
+            lblTitulo.Size = new Size(300, 25);
             lblTitulo.TabIndex = 45;
-            lblTitulo.Text = "Lista de socios morosos";
+            lblTitulo.Text = "Socios que tienen cuotas vencidas:";
             // 
             // btnVolver
             // 
@@ -55,15 +60,53 @@
             btnVolver.UseVisualStyleBackColor = false;
             btnVolver.Click += btnVolver_Click;
             // 
+            // dtgvMorosos
+            // 
+            dtgvMorosos.AllowUserToAddRows = false;
+            dtgvMorosos.AllowUserToDeleteRows = false;
+            dtgvMorosos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dtgvMorosos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dtgvMorosos.Columns.AddRange(new DataGridViewColumn[] { colNum, colApellido, colNombre });
+            dtgvMorosos.Location = new Point(101, 120);
+            dtgvMorosos.Name = "dtgvMorosos";
+            dtgvMorosos.ReadOnly = true;
+            dtgvMorosos.RowHeadersWidth = 51;
+            dtgvMorosos.Size = new Size(569, 188);
+            dtgvMorosos.TabIndex = 47;
+            // 
+            // colNum
+            // 
+            colNum.HeaderText = "ID";
+            colNum.MinimumWidth = 6;
+            colNum.Name = "colNum";
+            colNum.ReadOnly = true;
+            // 
+            // colApellido
+            // 
+            colApellido.HeaderText = "Apellido";
+            colApellido.MinimumWidth = 6;
+            colApellido.Name = "colApellido";
+            colApellido.ReadOnly = true;
+            // 
+            // colNombre
+            // 
+            colNombre.HeaderText = "Nombre";
+            colNombre.MinimumWidth = 6;
+            colNombre.Name = "colNombre";
+            colNombre.ReadOnly = true;
+            // 
             // frmListaMorosos
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(dtgvMorosos);
             Controls.Add(btnVolver);
             Controls.Add(lblTitulo);
             Name = "frmListaMorosos";
-            Text = "frmListaMorosos";
+            Text = "Lista de socios morosos";
+            Load += frmListaMorosos_Load;
+            ((System.ComponentModel.ISupportInitialize)dtgvMorosos).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -72,5 +115,9 @@
 
         private Label lblTitulo;
         private Button btnVolver;
+        private DataGridView dtgvMorosos;
+        private DataGridViewTextBoxColumn colNum;
+        private DataGridViewTextBoxColumn colApellido;
+        private DataGridViewTextBoxColumn colNombre;
     }
 }

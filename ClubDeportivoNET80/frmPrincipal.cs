@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ClubDeportivoNET80.Datos;
+using ClubDeportivoNET80.Entidades;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -62,9 +64,18 @@ namespace ClubDeportivoNET80
         private void btnGenerarListaMorosos_Click(object sender, EventArgs e)
         {
 
-            frmListaMorosos listaMorosos = new frmListaMorosos();
-            listaMorosos.Show();
-            this.Hide();
+            List<E_Socio> sociosMorosos = Clientes.ObtenerSociosMorosos();
+
+            if (sociosMorosos.Count > 0)
+            {
+                frmListaMorosos listaMorosos = new frmListaMorosos(sociosMorosos);
+                listaMorosos.ShowDialog();
+
+            }
+            else
+            {
+                MensajeSistema.MostrarInformacion("No hay socios morosos.");
+            }
 
         }
     }

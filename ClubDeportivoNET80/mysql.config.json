@@ -1,9 +1,0 @@
-{
-    "DatosConexion": {
-        "NombreBd": "Proyecto",
-        "Servidor": "localhost",
-        "Puerto": "3306",
-        "Usuario": "root",
-        "Clave": "shinee/2207"
-    }
-}
