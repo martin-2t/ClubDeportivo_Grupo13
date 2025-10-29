@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ClubDeportivoNET80.Datos;
+using ClubDeportivoNET80.Entidades;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +14,11 @@ namespace ClubDeportivoNET80
 {
     public partial class frmRegistrarNoSocio : Form
     {
-        public frmRegistrarNoSocio()
+        private Form? frmInicial;
+        public frmRegistrarNoSocio(Form i)
         {
             InitializeComponent();
+            this.frmInicial = i;
         }
 
         private void frmRegistrarNoSocio_Load(object sender, EventArgs e)
@@ -22,33 +26,69 @@ namespace ClubDeportivoNET80
 
         }
 
+        // Vuelve a mostrar el formulario que lo llamo y se cierra este.
         private void btnCancelar_Click(object sender, EventArgs e)
         {
 
-            frmPrincipal principal = new frmPrincipal();
-            principal.Show();
+            if (this.frmInicial != null) { this.frmInicial.Show(); }
             this.Close();
 
         }
 
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
-            if (txtNombre.Text == "" ||
-                txtApellido.Text == "" ||
-                txtTelefono.Text == "" ||
-                txtEmail.Text == "" ||
-                !chkAptoFisico.Checked
-                )
+            if (ctrlRegistrarClienteNoSocio.EstaVacio())
             {
-                MessageBox.Show("Debe completar datos requeridos (*) ",
-                "AVISO DEL SISTEMA", MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
-            }
+                MensajeSistema.MostrarError("Debe completar datos requeridos (*)");
+
+            } 
             else
             {
+                // Se guarda la información en un objeto NoSocio.
+                E_NoSocio noSocio = new E_NoSocio(ctrlRegistrarClienteNoSocio.ObtenerNombre(),
+                                            ctrlRegistrarClienteNoSocio.ObtenerApellido(),
+                                            ctrlRegistrarClienteNoSocio.ObtenerEmail(),
+                                            ctrlRegistrarClienteNoSocio.ObtenerTelefono(),
+                                            ctrlRegistrarClienteNoSocio.ObtenerTipoDoc(),
+                                            ctrlRegistrarClienteNoSocio.ObtenerNumDoc(),
+                                            true);
+                string? respuesta = Clientes.RegistrarNoSocio(noSocio);
+
+                ProcesarRespuestaRegistro(respuesta, noSocio);
 
             }
 
         }
+
+        private void ProcesarRespuestaRegistro(string? respuesta, E_NoSocio noSocio)
+        {
+            bool esNumero = int.TryParse(respuesta, out int idGenerado);
+
+            if (esNumero)
+            {
+                switch (idGenerado)
+                {
+                    case -1:
+                        ctrlRegistrarClienteNoSocio.LimpiarCampos();
+                        MensajeSistema.MostrarError("El cliente ya existe.");
+                        break;
+                    default:
+                        ctrlRegistrarClienteNoSocio.LimpiarCampos();
+                        MensajeSistema.MostrarInformacion(
+                            $"{noSocio.Nombre} {noSocio.Apellido} registrado exitosamente con el ID {respuesta}"
+                            );
+                        break;
+                }
+
+            }
+            else
+            {
+                MensajeSistema.MostrarError("Error al registrar al no socio.");
+            }
+        }
+
+
+
+        // FIN
     }
 }

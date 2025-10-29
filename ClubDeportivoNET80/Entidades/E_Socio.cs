@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClubDeportivoNET80.Datos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,12 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace ClubDeportivoNET80.Entidades
 {
-    internal class E_Socio : E_Cliente
+    public class E_Socio : E_Cliente
     {
-        // Constructor
+
+        private List<E_CuotaMensual>? cuotas;
+
+        // Constructor usado por frm.RegistrarSocio
         public E_Socio(string nombre,
                         string apellido,
                         string email,
@@ -25,25 +29,64 @@ namespace ClubDeportivoNET80.Entidades
             EsSocio = true;
         }
 
-        // Método imprimir carnet.
-        public string ImprimirCarnet()
+
+        // Constructor usado por Datos.Clientes.ObtenerCliente()
+        public E_Socio(int id,
+            string nombre,
+            string apellido,
+            string estado
+        ) : base(id, nombre, apellido)
         {
-            StringBuilder carnet = new StringBuilder();
+            EsSocio = true;
+            Estado = estado;
+            this.cuotas = new List<E_CuotaMensual>();
+        }
 
-            carnet.AppendLine("***** CARNET DE SOCIO *****");
-            carnet.AppendLine($"ID Socio: {Id}");
-            carnet.AppendLine($"Nombre: {Nombre} {Apellido}");
-            carnet.AppendLine($"Documento: {(TipoDocumento == 1 ? "DNI" : "Pasaporte")} - {NumeroDocumento}");
-            carnet.AppendLine($"Email: {Email}");
-            carnet.AppendLine($"Teléfono: {Telefono}");
-            carnet.AppendLine($"Fecha de Alta: {FechaAlta:dd/MM/yyyy}");
-            carnet.AppendLine($"Apto físico: {(AptoFisico ? "Sí" : "No")}");
-            carnet.AppendLine("***************************");
+        // Constructor usado por Datos.Clientes.ObtenerSociosMorosos()
+        public E_Socio(int id,
+            string nombre,
+            string apellido
+        ) : base(id, nombre, apellido)
+        {
 
-            return carnet.ToString();
+        }
+
+        // Carga la lista cuotas del socio.
+        public void ObtenerCuotas()
+        {
+            if (this.cuotas != null)
+            {
+                this.cuotas = Cuotas.ObtenerCuotas(this.Id, this.cuotas);
+            }
+            
+        }
+
+        // Llena la lista recivida solo con las cuotas pendientes/vencidas.
+        public void ObtenerCuotasPendientes(List<E_CuotaMensual> pendientes)
+        {
+         
+            if (this.cuotas != null)
+            {
+                pendientes.Clear();
+                pendientes.AddRange(this.cuotas
+                                    .Where(c => c.Estado == "pendiente" || 
+                                           c.Estado == "vencida"));
+                                    
+            }
+
+        }
+
+        // devuelve la primer cuota pagada
+        // (en este caso la única que es obtenida de la db)
+        public E_CuotaMensual? ObtenerUltimaPagada()
+        {
+
+            return this.cuotas?.FirstOrDefault(c => c.Estado == "pagada");
+
         }
 
 
 
+        //FIN
     }
 }

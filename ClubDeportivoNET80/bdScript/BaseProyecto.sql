@@ -92,11 +92,11 @@ VALUES
 -- Actualiza fecha_alta para que tengan sentido los registros de pago.
 UPDATE clientes SET fecha_alta = '2025-08-25' WHERE id_cliente = 1;
 UPDATE clientes SET fecha_alta = '2025-07-25' WHERE id_cliente = 2;
-UPDATE clientes SET fecha_alta = '2025-07-28' WHERE id_cliente = 3;
+UPDATE clientes SET fecha_alta = '2025-06-28' WHERE id_cliente = 3;
 UPDATE clientes SET fecha_alta = '2025-07-25' WHERE id_cliente = 4;
 UPDATE clientes SET fecha_alta = '2025-08-25' WHERE id_cliente = 5;
 UPDATE clientes SET fecha_alta = '2025-08-25' WHERE id_cliente = 6;
-UPDATE clientes SET fecha_alta = '2025-06-10' WHERE id_cliente = 7;
+UPDATE clientes SET fecha_alta = '2025-05-10' WHERE id_cliente = 7;
 UPDATE clientes SET fecha_alta = '2025-06-28' WHERE id_cliente = 8;
 UPDATE clientes SET fecha_alta = '2025-08-25' WHERE id_cliente = 9;
 UPDATE clientes SET fecha_alta = '2025-06-28' WHERE id_cliente = 10;
@@ -156,6 +156,7 @@ VALUES
 -- Socio 3: Moroso, tiene cuotas vencidas + cuota pendiente
 INSERT INTO cuotas_mensuales (id_cliente, monto, fecha_emision, fecha_vencimiento, fecha_pago, modo_pago, estado)
 VALUES
+(3, 1000, '2025-07-01', '2025-07-31', '2025-07-06', 'efectivo', 'pagada'),
 (3, 1000, '2025-08-01', '2025-08-31', NULL, NULL, 'vencida'),
 (3, 1000, '2025-09-01', '2025-09-30', NULL, NULL, 'vencida'),
 (3, 1000, '2025-10-01', '2025-10-31', NULL, NULL, 'pendiente');
@@ -170,6 +171,7 @@ VALUES
 -- Socio 7: Moroso, varias cuotas vencidas + cuota pendiente
 INSERT INTO cuotas_mensuales (id_cliente, monto, fecha_emision, fecha_vencimiento, fecha_pago, modo_pago, estado)
 VALUES
+(7, 1000, '2025-06-01', '2025-06-30', '2025-06-14', 'efectivo', 'pagada'),
 (7, 1000, '2025-07-01', '2025-07-31', NULL, NULL, 'vencida'),
 (7, 1000, '2025-08-01', '2025-08-31', NULL, NULL, 'vencida'),
 (7, 1000, '2025-09-01', '2025-09-30', NULL, NULL, 'vencida'),
@@ -382,3 +384,233 @@ BEGIN
 END //
 
 DELIMITER ;
+
+
+-- *************************************
+-- --> PROCEDIMIENTO NuevoNoSocio
+-- *************************************
+
+
+DROP PROCEDURE IF EXISTS NuevoNoSocio;
+
+DELIMITER //
+
+CREATE PROCEDURE NuevoNoSocio( 
+								IN nombre VARCHAR(30), 
+                                IN apellido VARCHAR(30), 
+                                IN tipo_documento INT, 
+                                IN numero_documento VARCHAR(20), 
+                                IN email VARCHAR(40),
+                                IN telefono VARCHAR(20),
+                                IN apto_fisico BOOLEAN,
+                                OUT respuesta INT
+                                )
+BEGIN
+
+	DECLARE existe INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO existe
+    FROM clientes C
+    WHERE C.tipo_documento = tipo_documento AND C.numero_documento = numero_documento;
+    
+    IF existe = 0 THEN
+        
+		INSERT INTO clientes(nombre, apellido, tipo_documento, numero_documento, email, telefono, es_socio, apto_fisico)
+        VALUES
+        (nombre, apellido, tipo_documento, numero_documento, email, telefono, false, apto_fisico);
+        
+        SET respuesta = last_insert_id();
+        
+	ELSE
+		SET respuesta = -1;
+        
+	END IF;
+        
+END //
+
+DELIMITER ;
+
+-- *************************************
+-- --> PROCEDIMIENTO TieneCuotasPendientes
+-- *************************************
+
+DROP PROCEDURE IF EXISTS TieneCuotasPendientes;
+
+DELIMITER //
+
+CREATE PROCEDURE TieneCuotasPendientes(
+    IN id_cliente INT,
+    OUT tiene BOOLEAN
+)
+BEGIN
+
+SELECT COUNT(*) > 0 INTO tiene
+FROM cuotas_mensuales CM
+WHERE CM.id_cliente = id_cliente
+	AND CM.estado IN ('pendiente', 'vencida');
+    
+END //
+
+DELIMITER ;
+
+-- *************************************
+-- --> PROCEDIMIENTO ObtenerCuotas
+-- *************************************
+
+DROP PROCEDURE IF EXISTS ObtenerCuotas;
+
+DELIMITER //
+
+CREATE PROCEDURE ObtenerCuotas(
+    IN id_cliente INT
+)
+BEGIN
+
+    WITH ultima_pagada AS (
+        SELECT CM.id_cuota
+        FROM cuotas_mensuales CM
+        WHERE CM.id_cliente = id_cliente
+          AND CM.estado = 'pagada'
+        ORDER BY CM.fecha_pago DESC
+        LIMIT 1
+    )
+    SELECT 
+        CM.id_cuota,
+        CM.monto,
+        CM.fecha_vencimiento,
+        CM.fecha_pago,
+        CM.estado
+    FROM cuotas_mensuales CM
+    LEFT JOIN ultima_pagada UP ON CM.id_cuota = UP.id_cuota
+    WHERE CM.id_cliente = id_cliente
+      AND (CM.estado IN ('pendiente', 'vencida') OR UP.id_cuota IS NOT NULL)
+    ORDER BY CM.fecha_vencimiento DESC;
+    
+END //
+
+DELIMITER ;
+
+-- *************************************
+-- --> PROCEDIMIENTO ObtenerCliente
+-- *************************************
+
+DROP PROCEDURE IF EXISTS ObtenerCliente;
+
+DELIMITER //
+
+CREATE PROCEDURE ObtenerCliente(
+    IN id_cliente INT
+)
+BEGIN
+    -- Si no existe, no devuelve filas
+    SELECT 
+        C.id_cliente,
+        C.nombre,
+        C.apellido,
+        C.es_socio,
+        C.estado
+	FROM clientes C
+    WHERE C.id_cliente = id_cliente;
+END //
+
+DELIMITER ;
+
+-- *************************************
+-- --> PROCEDIMIENTO ActualizarEstadoCliente
+-- *************************************
+
+DROP PROCEDURE IF EXISTS ActualizarEstadoCliente;
+
+DELIMITER //
+
+CREATE PROCEDURE ActualizarEstadoCliente(
+    IN id_cliente INT
+)
+BEGIN
+	DECLARE cuotas_vencidas INT DEFAULT 0;
+    -- Cuenta cuantas cuotas vencidas tiene el cliente
+    SELECT COUNT(*) INTO cuotas_vencidas
+    FROM cuotas_mensuales CM
+    WHERE CM.id_cliente = id_cliente
+      AND estado = 'vencida';
+
+	    -- Si no tiene cuotas vencidas, actualizamos el estado a activo
+    IF cuotas_vencidas = 0 THEN
+        UPDATE clientes C
+        SET C.estado = 'activo'
+        WHERE C.id_cliente = id_cliente;
+    END IF;
+
+END //
+
+DELIMITER ;
+
+-- *************************************
+-- --> PROCEDIMIENTO ObtenerActividades
+-- *************************************
+
+DROP PROCEDURE IF EXISTS ObtenerActividades;
+
+DELIMITER //
+
+CREATE PROCEDURE ObtenerActividades(
+)
+BEGIN
+    -- Si no existe, no devuelve filas
+    SELECT 
+        A.id_actividad,
+        A.nombre,
+        A.monto
+	FROM actividades A;
+    
+END //
+
+DELIMITER ;
+
+-- *************************************
+-- --> PROCEDIMIENTO PagarCuotaDiaria
+-- *************************************
+
+DROP PROCEDURE IF EXISTS PagarCuotaDiaria;
+
+DELIMITER //
+
+CREATE PROCEDURE PagarCuotaDiaria(
+	IN id_cliente INT,
+    IN id_actividad INT,
+    IN modo_pago VARCHAR(20),
+    IN promocion VARCHAR(30)
+)
+BEGIN
+
+-- Registrar cuota diaria.
+	INSERT INTO cuotas_diarias(id_cliente, id_actividad, fecha, modo_pago, promocion)
+	VALUES(id_cliente, id_actividad, CURDATE(), modo_pago, promocion);
+    
+END //
+
+DELIMITER ;
+
+-- *************************************
+-- --> PROCEDIMIENTO ObtenerSociosMorosos
+-- *************************************
+
+DROP PROCEDURE IF EXISTS ObtenerSociosMorosos;
+
+DELIMITER //
+
+CREATE PROCEDURE ObtenerSociosMorosos(
+)
+BEGIN
+    SELECT 
+        C.id_cliente,
+        C.nombre,
+        C.apellido
+	FROM clientes C
+    WHERE C.es_socio = true  AND C.estado = "moroso";
+END //
+
+DELIMITER ;
+
+
+

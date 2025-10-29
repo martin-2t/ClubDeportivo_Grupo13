@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 
 namespace ClubDeportivoNET80.Entidades
 {
-    internal abstract class E_Cuota
+    public abstract class E_Cuota
     {
-        public string ModoPago { get; set; }
-        public string Promocion { get; set; }
-        public virtual decimal Monto { get; }
+        
+        // Propiedades
+        public int? Id { get; set; }
+        public string? ModoPago { get; set; }
+        public string? Promocion { get; set; }
+        public DateTime? FechaPago { get; set; }
+        public virtual decimal Monto { get; set; }
+
 
 
     }
