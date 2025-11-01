@@ -289,7 +289,7 @@ VALUES
 	1000, 
     DATE_ADD(@un_mes_antes, INTERVAL 10 DAY), 
 	DATE_ADD(CURDATE(), INTERVAL 10 DAY), 
-    DATE_ADD(CURDATE(), INTERVAL 5 DAY), 
+    DATE_SUB(CURDATE(), INTERVAL 12 DAY), 
     'efectivo', 
     'pagada'
 );
