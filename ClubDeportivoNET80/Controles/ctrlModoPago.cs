@@ -20,7 +20,7 @@ namespace ClubDeportivoNET80.Controles
         // Devuelve un string con el nombre del item seleccionado.
         public string ObtenerModoPago()
         {
-            return this.cboModoPago.Text;
+            return this.cboModoPago.Text.ToLower();
         }
 
         // Devuelve un string con el nombre del item seleccionado.
