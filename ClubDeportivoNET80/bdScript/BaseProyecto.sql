@@ -83,23 +83,46 @@ VALUES
 ('Valentina', 'Sanchez', 1, '4234567890', 'valentina.sanchez@mail.com', '111-3456', TRUE, TRUE, 'moroso'),
 ('Sofia', 'Martinez', 1, '5234567890', 'sofia.martinez@mail.com', '111-7890', FALSE, TRUE, NULL),
 ('Mateo', 'Diaz', 1, '6234567890', 'mateo.diaz@mail.com', '111-2345', FALSE, TRUE, NULL),
-('Camila', 'Torres', 1, '7234567890', 'camila.torres@mail.com', '111-6789', TRUE, TRUE, 'moroso'),
+('Camila', 'Torres', 1, '7234567890', 'camila.torres@mail.com', '111-6789', FALSE, TRUE, NULL),
 ('Nicolas', 'Ruiz', 1, '8234567890','nicolas.ruiz@mail.com', '111-0123', TRUE, TRUE, 'activo'),
 ('Laura', 'Castro', 1, '9234567890', 'laura.castro@mail.com', '111-4567', FALSE, TRUE, NULL),
 ('Federico', 'Vega', 1, '0234567890', 'federico.vega@mail.com', '111-8901', TRUE, TRUE, 'activo');
 
+-- Inicializo variables para las fechas.
+
+SET @un_mes_antes = DATE_SUB(CURDATE(), INTERVAL 1 MONTH);
+SET @dos_mes_antes = DATE_SUB(CURDATE(), INTERVAL 2 MONTH);
+SET @tres_mes_antes = DATE_SUB(CURDATE(), INTERVAL 3 MONTH);
+SET @cuatro_mes_antes = DATE_SUB(CURDATE(), INTERVAL 4 MONTH);
+
 
 -- Actualiza fecha_alta para que tengan sentido los registros de pago.
-UPDATE clientes SET fecha_alta = '2025-08-25' WHERE id_cliente = 1;
-UPDATE clientes SET fecha_alta = '2025-07-25' WHERE id_cliente = 2;
-UPDATE clientes SET fecha_alta = '2025-06-28' WHERE id_cliente = 3;
+UPDATE clientes 
+SET fecha_alta = DATE_SUB(@dos_mes_antes, INTERVAL 1 DAY) 
+WHERE id_cliente = 1;
+
+UPDATE clientes 
+SET fecha_alta = DATE_SUB(@tres_mes_antes, INTERVAL 8 DAY) 
+WHERE id_cliente = 2;
+
+UPDATE clientes 
+SET fecha_alta = DATE_SUB(@cuatro_mes_antes, INTERVAL 3 DAY) 
+WHERE id_cliente = 3;
+
 UPDATE clientes SET fecha_alta = '2025-07-25' WHERE id_cliente = 4;
 UPDATE clientes SET fecha_alta = '2025-08-25' WHERE id_cliente = 5;
 UPDATE clientes SET fecha_alta = '2025-08-25' WHERE id_cliente = 6;
 UPDATE clientes SET fecha_alta = '2025-05-10' WHERE id_cliente = 7;
-UPDATE clientes SET fecha_alta = '2025-06-28' WHERE id_cliente = 8;
+
+UPDATE clientes 
+SET fecha_alta = DATE_SUB(@dos_mes_antes, INTERVAL 1 DAY) 
+WHERE id_cliente = 8;
+
 UPDATE clientes SET fecha_alta = '2025-08-25' WHERE id_cliente = 9;
-UPDATE clientes SET fecha_alta = '2025-06-28' WHERE id_cliente = 10;
+
+UPDATE clientes 
+SET fecha_alta = DATE_SUB(@tres_mes_antes, INTERVAL 8 DAY) 
+WHERE id_cliente = 10;
 
 
 -- *************************************
@@ -140,58 +163,136 @@ CREATE TABLE cuotas_mensuales(
     CONSTRAINT fk_socio_cuota FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente)
 );
 
--- Socio 1: Activo, todo pagado menos la cuota del mes actual
+-- Socio ID 1: Activo, todo pagado menos la cuota del mes actual, ¡que se le vence hoy!
 INSERT INTO cuotas_mensuales (id_cliente, monto, fecha_emision, fecha_vencimiento, fecha_pago, modo_pago, estado)
 VALUES
-(1, 1000, '2025-09-01', '2025-09-30', '2025-09-28', 'efectivo', 'pagada'),
-(1, 1000, '2025-10-01', '2025-10-31', NULL, NULL, 'pendiente');
+(	1, 
+	10000, 
+	DATE_SUB(@dos_mes_antes, INTERVAL 1 DAY), 
+    DATE_SUB(@un_mes_antes, INTERVAL 1 DAY), 
+    DATE_SUB(@dos_mes_antes, INTERVAL 1 DAY), 
+    'efectivo', 'pagada'
+),
+(	1, 
+	20000, 
+    @un_mes_antes, 
+    CURDATE(), 
+    NULL, 
+    NULL, 
+    'pendiente'
+);
 
--- Socio 2: Activo, varias cuotas pagadas, cuota pendiente actual
+-- Socio ID 2: Activo, varias cuotas pagadas, cuota pendiente actual pero no se le vence hoy.
 INSERT INTO cuotas_mensuales (id_cliente, monto, fecha_emision, fecha_vencimiento, fecha_pago, modo_pago, estado)
 VALUES
-(2, 1000, '2025-08-01', '2025-08-31', '2025-08-28', 'efectivo', 'pagada'),
-(2, 1000, '2025-09-01', '2025-09-30', '2025-09-28', 'efectivo', 'pagada'),
-(2, 1000, '2025-10-01', '2025-10-31', NULL, NULL, 'pendiente');
+(	2, 
+	10000, 
+    DATE_ADD(@tres_mes_antes, INTERVAL 8 DAY), 
+    DATE_ADD(@dos_mes_antes, INTERVAL 8 DAY), 
+    DATE_ADD(@tres_mes_antes, INTERVAL 8 DAY), 
+    'efectivo', 
+    'pagada'),
+(	2, 
+	10000,
+    DATE_ADD(@dos_mes_antes, INTERVAL 9 DAY), 
+    DATE_ADD(@un_mes_antes, INTERVAL 9 DAY), 
+    DATE_ADD(@un_mes_antes, INTERVAL 2 DAY), 
+    'efectivo', 
+    'pagada'),
+(	2, 
+	20000, 
+    DATE_ADD(@un_mes_antes, INTERVAL 10 DAY), 
+	DATE_ADD(CURDATE(), INTERVAL 10 DAY), 
+    NULL, 
+    NULL, 
+    'pendiente'
+);
 
--- Socio 3: Moroso, tiene cuotas vencidas + cuota pendiente
+-- Socio ID 3: Moroso, tiene cuotas vencidas + cuota pendiente que se le vence hoy.
 INSERT INTO cuotas_mensuales (id_cliente, monto, fecha_emision, fecha_vencimiento, fecha_pago, modo_pago, estado)
 VALUES
-(3, 1000, '2025-07-01', '2025-07-31', '2025-07-06', 'efectivo', 'pagada'),
-(3, 1000, '2025-08-01', '2025-08-31', NULL, NULL, 'vencida'),
-(3, 1000, '2025-09-01', '2025-09-30', NULL, NULL, 'vencida'),
-(3, 1000, '2025-10-01', '2025-10-31', NULL, NULL, 'pendiente');
+(	3, 10000, 
+	DATE_SUB(@cuatro_mes_antes, INTERVAL 3 DAY), 
+    DATE_SUB(@tres_mes_antes, INTERVAL 3 DAY), 
+    DATE_SUB(@cuatro_mes_antes, INTERVAL 3 DAY), 
+    'efectivo', 'pagada'),
+(	3, 10000, 
+	DATE_SUB(@tres_mes_antes, INTERVAL 2 DAY), 
+    DATE_SUB(@dos_mes_antes, INTERVAL 2 DAY), 
+    NULL, 
+    NULL, 'vencida'),
+(	3, 10000, 
+	DATE_SUB(@dos_mes_antes, INTERVAL 1 DAY), 
+    DATE_SUB(@un_mes_antes, INTERVAL 1 DAY), 
+    NULL, 
+	NULL,'vencida'),
+(	3, 20000, 
+	@un_mes_antes, 
+    CURDATE(), 
+    NULL, NULL, 'pendiente');
 
--- Socio 4: Moroso, 1 vencida + cuota pendiente
+-- Socio ID 4: Moroso, 1 vencida + cuota pendiente que no se le vence hoy
 INSERT INTO cuotas_mensuales (id_cliente, monto, fecha_emision, fecha_vencimiento, fecha_pago, modo_pago, estado)
 VALUES
-(4, 1000, '2025-08-01', '2025-08-31', '2025-08-16', 'tarjeta', 'pagada'),
-(4, 1000, '2025-09-01', '2025-09-30', NULL, NULL, 'vencida'),
-(4, 1000, '2025-10-01', '2025-10-31', NULL, NULL, 'pendiente');
+(	4, 10000, 
+	DATE_ADD(@tres_mes_antes, INTERVAL 20 DAY), 
+    DATE_ADD(@dos_mes_antes, INTERVAL 20 DAY), 
+    DATE_ADD(@tres_mes_antes, INTERVAL 20 DAY), 
+    'tarjeta', 'pagada'),
+(	4, 10000, 
+	DATE_ADD(@dos_mes_antes, INTERVAL 21 DAY), 
+    DATE_ADD(@un_mes_antes, INTERVAL 21 DAY), 
+    NULL, NULL, 'vencida'),
+(	4, 20000, 
+    DATE_ADD(@un_mes_antes, INTERVAL 22 DAY), 
+    DATE_ADD(CURDATE(), INTERVAL 22 DAY), 
+    NULL, NULL, 'pendiente');
 
--- Socio 7: Moroso, varias cuotas vencidas + cuota pendiente
+-- Socio ID 8: Activo, se le venceria hoy pero ya la pago.
 INSERT INTO cuotas_mensuales (id_cliente, monto, fecha_emision, fecha_vencimiento, fecha_pago, modo_pago, estado)
 VALUES
-(7, 1000, '2025-06-01', '2025-06-30', '2025-06-14', 'efectivo', 'pagada'),
-(7, 1000, '2025-07-01', '2025-07-31', NULL, NULL, 'vencida'),
-(7, 1000, '2025-08-01', '2025-08-31', NULL, NULL, 'vencida'),
-(7, 1000, '2025-09-01', '2025-09-30', NULL, NULL, 'vencida'),
-(7, 1000, '2025-10-01', '2025-10-31', NULL, NULL, 'pendiente');
+(	8, 
+	20000, 
+	DATE_SUB(@dos_mes_antes, INTERVAL 1 DAY), 
+    DATE_SUB(@un_mes_antes, INTERVAL 1 DAY), 
+    DATE_SUB(@dos_mes_antes, INTERVAL 1 DAY), 
+    'efectivo', 
+    'pagada'
+),
+(	8, 
+	20000, 
+    @un_mes_antes, 
+    CURDATE(), 
+    DATE_SUB(CURDATE(), INTERVAL 2 DAY), 
+    'efectivo', 
+    'pagada'
+);
 
--- Socio 8: Activo, todo pagado
+-- Socio ID 10: Activo, todo pagado
 INSERT INTO cuotas_mensuales (id_cliente, monto, fecha_emision, fecha_vencimiento, fecha_pago, modo_pago, estado)
 VALUES
-(8, 1000, '2025-07-01', '2025-07-31', '2025-07-28', 'efectivo', 'pagada'),
-(8, 1000, '2025-08-01', '2025-08-31', '2025-08-28', 'efectivo', 'pagada'),
-(8, 1000, '2025-09-01', '2025-09-30', '2025-09-28', 'efectivo', 'pagada'),
-(8, 1000, '2025-10-01', '2025-10-31', '2025-10-03', 'efectivo', 'pagada');
-
--- Socio 10: Activo, todo pagado
-INSERT INTO cuotas_mensuales (id_cliente, monto, fecha_emision, fecha_vencimiento, fecha_pago, modo_pago, estado)
-VALUES
-(10, 1000, '2025-07-01', '2025-07-31', '2025-07-28', 'efectivo', 'pagada'),
-(10, 1000, '2025-08-01', '2025-08-31', '2025-08-28', 'efectivo', 'pagada'),
-(10, 1000, '2025-09-01', '2025-09-30', '2025-09-28', 'efectivo', 'pagada'),
-(10, 1000, '2025-10-01', '2025-10-31', '2025-10-03', 'efectivo', 'pagada');
+(	10, 
+	1000, 
+    DATE_SUB(@tres_mes_antes, INTERVAL 8 DAY), 
+    DATE_SUB(@dos_mes_antes, INTERVAL 8 DAY), 
+    DATE_SUB(@tres_mes_antes, INTERVAL 8 DAY), 
+    'efectivo', 
+    'pagada'),
+(	10, 
+	1000,
+    DATE_ADD(@dos_mes_antes, INTERVAL 9 DAY), 
+    DATE_ADD(@un_mes_antes, INTERVAL 9 DAY), 
+    DATE_ADD(@un_mes_antes, INTERVAL 2 DAY), 
+    'efectivo', 
+    'pagada'),
+(	10, 
+	1000, 
+    DATE_ADD(@un_mes_antes, INTERVAL 10 DAY), 
+	DATE_ADD(CURDATE(), INTERVAL 10 DAY), 
+    DATE_SUB(CURDATE(), INTERVAL 12 DAY), 
+    'efectivo', 
+    'pagada'
+);
 
 -- *************************************
 -- --> TABLA DE CUOTAS DIARIAS
@@ -602,12 +703,13 @@ DELIMITER //
 CREATE PROCEDURE ObtenerSociosMorosos(
 )
 BEGIN
-    SELECT 
-        C.id_cliente,
-        C.nombre,
-        C.apellido
+	SELECT 
+			C.id_cliente,
+			C.nombre,
+			C.apellido
 	FROM clientes C
-    WHERE C.es_socio = true  AND C.estado = "moroso";
+	INNER JOIN cuotas_mensuales CM ON C.id_cliente = CM.id_cliente
+	WHERE CM.fecha_vencimiento = CURDATE() AND CM.estado != 'pagada';
 END //
 
 DELIMITER ;
