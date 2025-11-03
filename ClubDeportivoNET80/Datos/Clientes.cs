@@ -81,8 +81,7 @@ namespace ClubDeportivoNET80.Datos
             return salida;
         }
 
-        // Valida y carga los parametros necesarios para el carnet
-        // obtenidos desde la db, en la instancia de socio.
+        // Valida y carga los parametros necesarios para el carnet obtenidos desde la db.
         private static void CargarParametrosSalida(MySqlParameter id, MySqlParameter fecha_alta, E_Socio socio)
         {
             if (id.Value != DBNull.Value && Convert.ToInt32(id.Value) > 0)
@@ -94,6 +93,14 @@ namespace ClubDeportivoNET80.Datos
             }
 
         }
+
+        /* 
+         * Registra un nuevo E_NoSocio en la bd mediante el procedimiento almacenado "NuevoNoSocio".
+         * Devuelve el ID generado o un código de error según el resultado de la operación.
+         *  Codigos de error:
+         *      -1: si el cliente ya existe.
+         *      El mensaje de error si ocurrió una excepción.
+         */
 
         public static string? RegistrarNoSocio(E_NoSocio noSocio) 
         {
@@ -109,6 +116,7 @@ namespace ClubDeportivoNET80.Datos
                 MySqlCommand comando = new MySqlCommand("NuevoNoSocio", sqlCon);
                 comando.CommandType = CommandType.StoredProcedure;
 
+                // Se asignan los parametros requeridos para el procediminto almacenado.
                 comando.Parameters.Add("nombre", MySqlDbType.VarChar).Value = noSocio.Nombre;
                 comando.Parameters.Add("apellido", MySqlDbType.VarChar).Value = noSocio.Apellido;
                 comando.Parameters.Add("tipo_documento", MySqlDbType.Int32).Value = noSocio.TipoDocumento;
@@ -117,7 +125,7 @@ namespace ClubDeportivoNET80.Datos
                 comando.Parameters.Add("telefono", MySqlDbType.VarChar).Value = noSocio.Telefono;
                 comando.Parameters.Add("apto_fisico", MySqlDbType.Bit).Value = noSocio.AptoFisico;
 
-
+                // Se define el parametro de salida para obtener la respuesta del procedimiento almacenado.
                 MySqlParameter respuesta = new MySqlParameter();
                 respuesta.ParameterName = "respuesta";
                 respuesta.MySqlDbType = MySqlDbType.Int32;
@@ -129,6 +137,7 @@ namespace ClubDeportivoNET80.Datos
 
                 comando.ExecuteNonQuery();
 
+                // Se convierte la respuesta a string para devolverla como resultado.
                 salida = Convert.ToString(respuesta.Value);
 
             }
@@ -142,11 +151,15 @@ namespace ClubDeportivoNET80.Datos
 
             }
 
-            //SALIDA
+            // Devuelve la salida final.
             return salida;
 
         }
 
+        // Obtiene los datos de un cliente a partir de su ID.
+        // Si es Socio, crea un objeto E_Socio
+        // Si es NoSocio, crea un objeto E_NoSocio
+        // Si el cliente no existe, devuelve Null.
         public static E_Cliente? ObtenerCliente(int id)
         {
             E_Cliente? cliente = null;
@@ -170,9 +183,11 @@ namespace ClubDeportivoNET80.Datos
                 // Si hay información en la db.
                 if (lector.Read())
                 {
-           
+                    // se obtiene el valor de la columna 'es_socio'
                     bool esSocio = Convert.ToBoolean(lector["es_socio"]);
 
+                    // Si es socio se crea una instancia de E_Socio
+                    // Si no es socio, se crea una instancia de E_NoSocio
                     if (esSocio)
                     {
                         cliente = new E_Socio(

@@ -61,7 +61,7 @@ namespace ClubDeportivoNET80.Entidades
             
         }
 
-        // Llena la lista recivida solo con las cuotas pendientes/vencidas.
+        // Llena la lista recibida solo con las cuotas pendientes/vencidas.
         public void ObtenerCuotasPendientes(List<E_CuotaMensual> pendientes)
         {
          

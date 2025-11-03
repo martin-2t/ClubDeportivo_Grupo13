@@ -15,9 +15,12 @@ namespace ClubDeportivoNET80
 {
     public partial class frmPagarCuotaDiaria : Form
     {
-        E_NoSocio noSocio;
-        private List<int> idActividades;
-        private decimal montoTotal;
+        E_NoSocio noSocio; // Representa a el NoSocio que realizará el pago de cuota diaria.
+
+        private List<int> idActividades; // Lista de IDs de las actividades a pagar.
+        private decimal montoTotal; // Monto total a pagar según las actividades seleccionadas.
+
+        // Constructor, recibe el noSocio que realizará el pago.
         public frmPagarCuotaDiaria(E_NoSocio noSocio)
         {
             InitializeComponent();
@@ -31,10 +34,13 @@ namespace ClubDeportivoNET80
             this.Close();
         }
 
+        // Muestra el nombre del noSocio, carga las actividades disponibles
+        // y carga el montoTotal.
         private void frmPagarCuotaDiaria_Load(object sender, EventArgs e)
         {
             lblNoSocioNombre.Text = $"{noSocio.Apellido.ToUpper()} {noSocio.Nombre.ToUpper()}";
 
+            // Obtiene las actividades disponibles.
             LlenarDataGridView(Actividades.ObtenerActividades());
 
             ctrlMontoTotalDiario.CargarMonto(this.montoTotal);
@@ -70,6 +76,10 @@ namespace ClubDeportivoNET80
             }
         }
 
+        /*
+         * Procesa la seleccion o deseleccion de una actividad
+         * y actualiza el monto total.
+         */
         private void dtgvActividades_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex == dtgvActividades.Columns["colSeleccionar"].Index)
@@ -107,6 +117,10 @@ namespace ClubDeportivoNET80
 
         }
 
+        /* Valida que haya actividades seleccionadas
+         * y los campos requeridos no esten vacios.
+         * Se comunica con la clase de datos para procesar el pago.
+         */
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
             if (this.idActividades.Count == 0)
@@ -121,6 +135,7 @@ namespace ClubDeportivoNET80
             }
             else
             {
+                // Procesa el pago de las actividades seleccionadas.
                 Cuotas.PagarCuotaDiaria(this.idActividades,
                                         ctrlModoPagoDiario.ObtenerModoPago(),
                                         ctrlModoPagoDiario.ObtenerPromocion(),

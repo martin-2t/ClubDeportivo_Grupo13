@@ -61,6 +61,14 @@ namespace ClubDeportivoNET80
 
         }
 
+        /*
+         * Al hacer click en el botoón GenerarListaMorosos
+         * se comunica con la clase de datos Clientes para
+         * obtener de socios a los que se le vence la cuota en el dia de hoy.
+         * Si existen socios morosos, abre el formulario frmListaMorosos.
+         * Si no, muestra un mensaje al usuario.
+         */
+
         private void btnGenerarListaMorosos_Click(object sender, EventArgs e)
         {
 
