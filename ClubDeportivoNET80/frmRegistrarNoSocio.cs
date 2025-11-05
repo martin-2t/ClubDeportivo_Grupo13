@@ -35,6 +35,12 @@ namespace ClubDeportivoNET80
 
         }
 
+
+        /*
+         * Evento que se ejecuta al hacer click en el botón Registrar.
+         * Verifica los datos ingresados al formulario, y si no estan vacios
+         * crea un nuevo objeto E_NoSocio y llama a la clase de datos.
+         */
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
             if (ctrlRegistrarClienteNoSocio.EstaVacio())
@@ -52,16 +58,26 @@ namespace ClubDeportivoNET80
                                             ctrlRegistrarClienteNoSocio.ObtenerTipoDoc(),
                                             ctrlRegistrarClienteNoSocio.ObtenerNumDoc(),
                                             true);
+
+                // Se intenta registrar el no socio en la base de datos y se obtiene una respuesta.
                 string? respuesta = Clientes.RegistrarNoSocio(noSocio);
 
+                //Se procesa la respuesta del intento de registro.
                 ProcesarRespuestaRegistro(respuesta, noSocio);
 
             }
 
         }
 
+        /*
+         * Procesa la respuesta obtenida después del intento de registrar a un no socio.
+         *  Si el registro fue exitoso, devuelve el ID del no socio registrado.
+         *  Si ya existía el cliente, devuelve un mensaje avisando que el cliente ya existe.
+         *  Si hubo un error, se muestra un mensaje informando que un error a ocurrido.
+         */
         private void ProcesarRespuestaRegistro(string? respuesta, E_NoSocio noSocio)
         {
+            // Chequea si la respuesta en un número valido.
             bool esNumero = int.TryParse(respuesta, out int idGenerado);
 
             if (esNumero)
@@ -83,6 +99,7 @@ namespace ClubDeportivoNET80
             }
             else
             {
+                // Si la respuesta no es númerica, se interpreta como un error.
                 MensajeSistema.MostrarError("Error al registrar al no socio.");
             }
         }

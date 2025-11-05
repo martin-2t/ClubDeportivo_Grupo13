@@ -73,6 +73,14 @@ namespace ClubDeportivoNET80
 
         }
 
+        /*
+         * Procesa la respuesta obtenida después del intento de registrar a un no socio.
+         *  Si el registro fue exitoso, se crea una instancia de frmCarnet.
+         *  Si ya existía el cliente, devuelve un mensaje avisando que el cliente ya existe.
+         *  Si el registro fallo por un error de pago, se manda un mensaje de error al respecto.
+         *  Si hubo un error general, se muestra un mensaje informando que un error a ocurrido.
+         */
+
         private void ProcesarRespuestaRegistro(string? respuesta, E_Socio socio) 
         {
             bool esNumero = int.TryParse(respuesta, out int idGenerado);

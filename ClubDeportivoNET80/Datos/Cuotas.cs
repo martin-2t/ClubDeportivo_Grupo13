@@ -147,7 +147,7 @@ namespace ClubDeportivoNET80.Datos
 
                 Conexion.AbrirConexion(sqlCon);
 
-                // Rcorre cada cuota y llama al procedimiento almacenado para pagarla.
+                // Recorre cada cuota y llama al procedimiento almacenado para pagarla.
                 foreach (E_CuotaMensual cuota in cuotas)
                 {
                     idParametro.Value = cuota.Id;
