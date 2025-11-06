@@ -29,6 +29,19 @@ namespace ClubDeportivoNET80
 
         }
 
+        public static DialogResult MostrarPregunta(string texto, string titulo = "AVISO DEL SISTEMA")
+        {
+          return MessageBox.Show(texto, titulo,
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
+
+        }
+
+        public static string ObtenerIngreso(string texto, string titulo = "AVISO DEL SISTEMA")
+        {
+            return Microsoft.VisualBasic.Interaction.InputBox(texto, titulo);
+        }
+
 
 
         // FIN
