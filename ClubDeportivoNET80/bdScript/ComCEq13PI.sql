@@ -89,6 +89,7 @@ VALUES
 ('Federico', 'Vega', 1, '0234567890', 'federico.vega@mail.com', '111-8901', TRUE, TRUE, 'activo');
 
 -- Inicializo variables para las fechas.
+
 SET @un_mes_antes = DATE_SUB(CURDATE(), INTERVAL 1 MONTH);
 SET @dos_mes_antes = DATE_SUB(CURDATE(), INTERVAL 2 MONTH);
 SET @tres_mes_antes = DATE_SUB(CURDATE(), INTERVAL 3 MONTH);
