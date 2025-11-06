@@ -117,6 +117,7 @@
             txtNumDoc.Name = "txtNumDoc";
             txtNumDoc.Size = new Size(179, 27);
             txtNumDoc.TabIndex = 36;
+            txtNumDoc.KeyPress += txtNumDoc_KeyPress;
             // 
             // lblNumDoc
             // 

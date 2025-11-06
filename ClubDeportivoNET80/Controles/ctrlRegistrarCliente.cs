@@ -45,12 +45,12 @@ namespace ClubDeportivoNET80.Controles
         public bool EstaVacio()
         {
 
-            return ( string.IsNullOrWhiteSpace(txtNombre.Text)   ||
+            return (string.IsNullOrWhiteSpace(txtNombre.Text) ||
                      string.IsNullOrWhiteSpace(txtApellido.Text) ||
-                     string.IsNullOrWhiteSpace(cboTipoDoc.Text)  ||
-                     string.IsNullOrWhiteSpace(txtNumDoc.Text)   ||
+                     string.IsNullOrWhiteSpace(cboTipoDoc.Text) ||
+                     string.IsNullOrWhiteSpace(txtNumDoc.Text) ||
                      string.IsNullOrWhiteSpace(txtTelefono.Text) ||
-                     string.IsNullOrWhiteSpace(txtEmail.Text)    ||
+                     string.IsNullOrWhiteSpace(txtEmail.Text) ||
                      !chkAptoFisico.Checked);
 
         }
@@ -85,6 +85,15 @@ namespace ClubDeportivoNET80.Controles
         public int ObtenerTipoDoc()
         {
             return (cboTipoDoc.SelectedIndex.ToString() == "DNI") ? 1 : 2;
+        }
+
+        // Le prohibe al usuario escribir algo que no sea un número en ese input.
+        private void txtNumDoc_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
+            }
         }
 
 
