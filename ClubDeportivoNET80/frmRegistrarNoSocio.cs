@@ -47,7 +47,13 @@ namespace ClubDeportivoNET80
             {
                 MensajeSistema.MostrarError("Debe completar datos requeridos (*)");
 
-            } 
+            }
+            else if (!ctrlRegistrarClienteNoSocio.EsValido())
+            {
+                // Si los campos están completos pero los datos no son válidos
+                // el método EsValido ya muestra el mensaje
+                return;
+            }
             else
             {
                 // Se guarda la información en un objeto NoSocio.

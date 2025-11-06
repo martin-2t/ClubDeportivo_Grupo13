@@ -55,6 +55,48 @@ namespace ClubDeportivoNET80.Controles
 
         }
 
+        public bool EsValido()
+        {
+            // Verifica que el DNI tenga una longitud válida
+            if (txtNumDoc.Text.Length < 6 || txtNumDoc.Text.Length > 8)
+            {
+                MensajeSistema.MostrarError("El número de documento no es válido");
+                return false;
+            }
+
+            // Verifica que el teléfono sea numérico (permitiendo guiones)
+            string telefonoSinGuiones = txtTelefono.Text.Replace("-", "");
+            if (!long.TryParse(telefonoSinGuiones, out _))
+            {
+                MensajeSistema.MostrarError("El número de teléfono no es válido");
+                return false;
+            }
+
+            // Verifica formato de email
+            if (!EsEmailValido(txtEmail.Text))
+            {
+                MensajeSistema.MostrarError("El formato del email no es válido.");
+                return false;
+            }
+
+            // Si todo está correcto
+            return true;
+        }
+
+        // Método auxiliar para validar email
+        private bool EsEmailValido(string email)
+        {
+            try
+            {
+                var mail = new System.Net.Mail.MailAddress(email);
+                return mail.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         // Devuelven los valores de cada campo.
 
         public string ObtenerNombre()
