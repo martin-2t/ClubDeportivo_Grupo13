@@ -126,7 +126,7 @@ namespace ClubDeportivoNET80.Controles
 
         public int ObtenerTipoDoc()
         {
-            return (cboTipoDoc.SelectedIndex.ToString() == "DNI") ? 1 : 2;
+            return (cboTipoDoc.Text == "DNI") ? 1 : 2;
         }
 
         // Le prohibe al usuario escribir algo que no sea un número en ese input.
